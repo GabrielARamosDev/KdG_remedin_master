@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="js/jquery.min.js"></script>
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+
+	
+
+<style>
+
+	
+	html, body{
+		background: white !important;
+	}
+</style>
+<script type="text/javascript">
+		  
+			
+			$(document).ready(function () {
+				verificaTela();
+			});
+			function verificaTela(){
+				
+				var tam = window.innerHeight -20;
+				tam = tam + 'px'
+				$('#splash').css('height',tam);
+				
+			}
+		
+			 var tmr = setInterval(function(){ 
+				 		
+					window.location.href="indexA.html";
+						
+			});
+    </script>
+
+
+</head>
+<body>
+<img id ="splash" src="img/splash.png">
+
+
+</body>
+</html>

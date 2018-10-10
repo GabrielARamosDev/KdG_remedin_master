@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+
+	<title>Remedin</title>
+
+	<!--Include JQM and JQ.-->
+	<script src="cordova.js"></script>	
+	<script src="js/fastclick.js"></script>
+	
+	<!-- <link rel="stylesheet" href="css/themes/jqmfb.min.css" /> -->
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script src="js/ctrlHome.js"></script>
+	<script type="text/javascript" src="js/GALocalStorage.js"></script>
+	<!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false"></script> -->
+
+	<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ&callback=initMap" type="text/javascript"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ&libraries=places&callback=initMap" type="text/javascript"></script> -->
+	
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ&libraries=places"></script>
+
+	<link rel="stylesheet" type="text/css" href="css/icons.css" />
+	<link rel="stylesheet"  href="css/jqm-icon-pack-fa.css" />
+
+</head>
+<body>	
+
+	<div data-role="page" id="pageone">
+	  <div data-role="header" class="header header-wrap" style="margin-top: 0.1px;">
+			<div style="margin-left: 3.25em; font-size: 10px">
+				<h1>Farmácias Próximas</h1>
+			</div>
+			<img src="img/mapa2.png" style="float: right; margin-top: -45px" onclick="location.href='mapa.html'"/>
+			<input type="search" id="busca" class="search" placeholder="Busque seu produto"  name="search" id="search-basic" value=""/> 
+			<!-- <div data-role="navbar" >
+				<ul>
+				<li><a href="#"  class="icon" onclick="location.href='produtos.html#lista';$('#listview').css('visibility','visible');localStorage.setItem('listaHome','true')" style="height:32px;padding-top:-8px;background: url('img/listaB.png') no-repeat center"></a></li>
+				<li><a href="#" onclick="location.href='mapa.html'" class="icon location" style="height:32px;margin-top:2px"><p style="margin-top:2px">Mapa</p></a></li>				
+				</ul>
+			</div> -->
+	  </div>
+
+	  <div data-role="main" class="ui-content" style="margin-top:60px;"> 
+		<div class="content-primary">	
+			
+			<!-- <p>Fármacias próximas</p> -->
+			<!-- <img src="img/gps.png" style="margin-left:90%;margin-top:-84px" onclick="location.href='produtos.html'"/> -->
+			<ul data-role="listview" id ="listview">
+				<!-- <img class="aguarde" src="img/aguarde.gif"/>				 -->
+				<img class="aguarde" src="img/aguarde.gif"/>
+			</ul> 
+		 </div>
+		 <a id="telefone" href="#"></a>
+	  </div>
+
+	  <div data-role="footer"  data-id="foo1" data-position="fixed" style="border: none;">
+			<!--<h1 onclick="location.href='produtos.html#lista';localStorage.setItem('listaHome','false')">Visualizar Lista</h1>-->
+			  
+		     <div data-role="navbar" data-iconpos="top">		 
+				<ul>
+				  <!-- <li><a href="indexA.html" onclick="location.href='indexA.html'" data-icon="home" class="rodape" style="font-size: 11px">Farmácias</a></li> -->
+				  <li><a href="indexA.html" id="aBusca" data-icon="search" class="rodape ui-btn-active" style="font-size: 11px">Busca</a></li>
+				  <li><a href="produtos.html#lista" onclick="location.href='produtos.html#lista'" data-icon="shop" class="rodape " style="font-size: 11px">Ver lista</a></li>
+				  <li><a href="produtos.html#perfil" data-ajax="false" class="rodape" data-icon="user" onclick="$('#aPerfil').addClass('ui-btn-active');verificaLogin()" style="font-size: 11px">Perfil</a></li>
+				  
+				  <!-- <li><a href="produtos.html" data-icon="search" class="rodape " onclick="$('#aBusca').addClass('ui-btn-active');">Busca</a></li>
+				  <li><a href="produtos.html#lista" data-icon="shop" class="rodape" onclick="$('#aLista').addClass('ui-btn-active'); calcularTam()">Ver lista</a></li>
+				  <li><a href="produtos.html#perfil" data-ajax="false" id="aPerfil" class="rodape" data-icon="user">Perfil</a></li> -->
+				</ul>
+			  </div>
+			  <script>
+					$('#aBusca').addClass('ui-btn-active');
+			  </script>
+	  </div>
+	</div> 
+	
+
+		
+
+</body>
+<style>
+	.dele3te{
+		border-left-width: 1px !important;
+		border-top-left-radius: inherit  !important;
+		border-bottom-left-radius: inherit  !important;
+		margin-left: 12px  !important;
+		border-color: red  !important;
+		border: solid  !important;
+		border-width: 1px  !important;
+		border-color: red  !important;
+	}
+	.icone{
+		
+		display: inline-block;
+		
+		line-height: 20px;
+
+	}
+	
+	.rodape{
+		
+		background:#f9f9f9;
+		color: #545454;
+	}
+	
+	.ui-btn-active{
+		background:#3AA1B7 !important;
+		color: white !important;
+		
+	}
+	
+	#btnOrcamento{
+		width: 100%;
+		height: 25px;
+		bottom: -7px;
+		font-size: 20px;
+		padding-left: 0px;
+	}
+	
+	.btnIcone{
+		
+		display: inline-block;
+		height: 5px;
+		line-height: 20px;
+		border-radius: 60px !important;
+		background: #3AA1B7;
+	}
+	
+</style>
+
+</html>

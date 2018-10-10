@@ -1,0 +1,894 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	 <meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+
+
+	<title>Emporio App</title>
+
+	<!--Include JQM and JQ-->
+	<script src="cordova.js"></script>	
+	<script src="js/fastclick.js"></script>
+	<!-- <link rel="stylesheet" href="css/themes/jqmfb.min.css" /> -->
+	<link rel="stylesheet" href="css/jquery.mobile.structure.min.css" />
+	<script src="js/jquery.min.js"></script>
+	
+	<!-- <script src="js/jquery.animate-enhanced.min.js"></script> -->
+	
+	<!--JQM globals you can edit or remove file entirely... note it needs to be loaded before jquerymobile js -->
+	<!-- <script src="js/jqm.globals.js"></script> -->
+	<!-- <link rel="stylesheet" href=""http://demos.jquerymobile.com/1.4.0/css/themes/default/jquery.mobile-1.4.0.min.css</script> -->
+	
+	<!-- <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+	<script src="js/jquery.mobile-1.4.5.min.js">
+	<script src="js/jquery.mobile.min.js"></script>
+
+	<!--JQM SlideMenu-->
+	<link rel="stylesheet" href="css/jqm.slidemenu.css" />
+	<script src="js/jqm.slidemenu.js"></script>
+	
+	 <link rel="stylesheet" type="text/css" href="css/af.ui.css" />
+    <link rel="stylesheet" type="text/css" href="css/icons.css" />
+	
+	
+	
+	<!-- <script type="text/javascript" src="cordova.js"></script> -->
+   
+	
+	
+	<style type="text/css">
+		dvMenu{
+			border:fixed;
+		}
+		
+		a{
+			font-family: Verdana;
+			color:black;
+			text-decoration:none;
+			border:none;
+			background:transparent
+			
+		}
+		
+		body{
+				font-family:verdana;
+			}
+		
+		p{
+			
+		}
+		
+		label{
+			padding: 8px;
+		}
+		
+		textarea{
+			width:100%;
+			border-radius: 25px;
+			height: 45px;
+			font-family: verdana;
+			padding:4px;
+			font-size: 15px;
+		}
+		
+		 input[type="text"],button,input[type="button"]{
+			width:100%;
+			border-radius: 25px;
+			height: 25px;
+			font-family: verdana;
+			padding:4px;
+			font-size: 15px;
+		}
+		button{
+			height:45px;
+		}
+		input[type="button"]{
+			height:35px;
+			margin-top: -4px;
+		}
+		.thumb{
+			border-radius: 10px;	
+		}
+		
+		#menuLi{
+			border:none;
+			background:transparent
+		}
+		.pai{
+			color:#C24641;
+			font-family: Verdana;
+		}
+		.paiF{
+			<!-- color:rgb(224,21,77); -->
+			font-family: Verdana;
+			margin-left:5px;
+		}
+		.paiC{
+			<!-- color:rgb(96,96,96); -->
+			font-family: Verdana;
+			margin-left:5px;
+		}
+		.paiM{
+			<!-- color:rgb(55,89,246); -->
+			font-family: Verdana;
+			margin-left:5px;
+		}
+		.paiI{
+			<!-- color:rgb(224,198,8); -->
+			font-family: Verdana;
+			margin-left:5px;
+		}
+		.filho{
+			margin-left:25px;
+			font-family: Verdana;
+			font-size:18px;
+			color:#848482
+		}
+		.filhoh{
+			margin-left:25px;
+			font-family: Verdana;
+			font-size:25px
+		}
+		#iGallery,#iGallery2,#iGallery3,#iGallery4,#iGallery6,#iGallery9 {
+			list-style: none;
+			padding: 0px;
+			margin: 0px
+		}
+		#iGallery li,#iGallery2 li,#iGallery3 li,#iGallery4 li, #iGallery6 li,#iGallery9 li {
+			list-style: none;
+			padding: 2px;
+			margin: 2px;
+			
+			float: left
+		}
+		/* imageflip CSS. Copy & Paste this to your CSS file */
+		#imageflippage {
+			background-color: #000;
+			margin: 0px;
+			padding: 0px;
+			border: none;
+			height: 100%;
+			width: 100%
+		}
+		#tadcontent {
+			padding: 0px;
+			margin: 0px;
+			position: relative;
+			background: #000;
+			height: 100%;
+			width: 100%;
+		}
+		#imageflipimg {
+			vertical-align: middle;
+			height: 100%;
+			width: 100%;
+			z-index: 98;
+			background-position: center;
+			background-size: contain;
+			text-align: center;
+			background-repeat: no-repeat
+		}
+		#imagefliper {
+			width: 100%;
+			top: 45px;
+			bottom: 0px;
+			position: absolute;
+			z-index: 99
+		}
+		#tadnavi {
+			position: fixed;
+			top: 0px;
+			z-index: 100;
+			width: 100%;
+			opacity: 0.7;
+			display: none
+		}
+		#tadinfo {
+			position: fixed;
+			display: none;
+			bottom: 0px;
+			width: 100%;
+			padding: 5px;
+			background-color: #333333;
+			opacity: 0.7;
+			color: #FFFFFF;
+			text-align: center;
+			font-size: small;
+			font-family: Verdana, Geneva, sans-serif
+		}
+		.preco{
+
+			margin-top: 2px;
+			margin-bottom: 2px;
+			margin-left: 30%;
+			font-family: Helvetica,Arial,sans-serif;
+			color:#C24641;
+			font-size:14px
+		}
+	
+		.itens{
+			border:none
+		}
+		
+		
+		
+	
+
+	
+	</style>
+	
+	
+	<script type="text/javascript">
+		//carregarAlbum('catalogo')
+		//FastClick.attach(document.body);
+		
+		document.addEventListener("deviceready", init, false);
+		jQuery(document).ready(function () {
+			
+			//jQuery("#menuL").trigger('click')
+			jQuery(".ui-btn-left").css('background','transparent')
+			jQuery(".ui-btn-left").css('border','none')
+			
+			jQuery('#slidemenu').css("width",window.innerWidth + 'px')
+			var pagina = localStorage.getItem("pagina");
+			var cat = localStorage.getItem("categoria");
+			var sub = localStorage.getItem("sub");
+			var genero = localStorage.getItem("genero");
+			var tmr = setInterval(function(){ 
+					carregarAlbum(pagina,cat,sub,genero)
+					carregarLook()
+					carregarCampanha()
+					
+					if (localStorage.getItem('usuario')=="" || localStorage.getItem('usuario') == "null" || localStorage.getItem('usuario') == null){
+						$('#hperfil').css("visibility","hidden");
+						
+					}
+					if (localStorage.getItem("revenda") == "true"){
+							$('#ser_revendedor').remove();
+					}
+					clearInterval(tmr)
+			 }, 1000);
+			 
+			
+			
+		});
+		function init()
+		{
+			
+			
+			//URL of our asset
+			//assetURL = "http://demo.massivedynamic.co/blog-masonry/wp-content/uploads/2016/01/photo-1455637696518-1bb72679c100.jpg";
+				
+			//File name of our important data file we didn't ship with the app
+			//fileName = "teste.jpg";
+			try
+			{
+			// store = cordova.file.externalDataDirectory;
+	
+			  cordova.plugins.ZoomControl.ZoomControl("false");
+         // enabling built in zoom control
+			  cordova.plugins.ZoomControl.setBuiltInZoomControls("false");
+         // enabling display zoom control
+			  cordova.plugins.ZoomControl.setDisplayZoomControls("false");
+			
+			
+			 
+			}catch(ex)
+			{
+				//alert(ex.message);
+			}
+			
+			
+		}
+	
+	
+		$( document ).delegate("#home", "pageinit", function() {
+			$('#iGallery').imageflip()
+		})
+		
+		var pos_busca;
+		
+		var imagem = [];
+		var look = [];
+		var campanha = [];
+		var dicas = [];
+		
+		
+		 $(document).ready(function() {
+
+			 
+			   //$.get("http://www.emporiofashion.4tuna.com.br/wp-content/data.json", 
+			  $.getJSON( "http://www.emporiofashion.4tuna.com.br/wp-content/page_4t_catalogo.php", function( data ) {
+			  //$.getJSON( "http://www.emporiofashion.4tuna.com.br/wp-content/file.json", function( data ) {
+			 // $.getJSON( "file.json", function( data ) {
+				
+				  var items = [];
+				  $.each( data, function( key, val ) {
+					
+					imagem.push(val);
+					
+					
+				  });
+				 
+				  
+				});
+				
+				$.getJSON( "http://www.emporiofashion.4tuna.com.br/wp-content/page_4t_look.php", function( data ) {
+				//$.getJSON( "http://www.emporiofashion.4tuna.com.br/wp-content/looks.json", function( data ) {
+			  //$.getJSON( "looks.json", function( data ) {
+				
+				  var items = [];
+				  $.each( data, function( key, val ) {
+					
+					look.push(val);
+					
+					
+				  });
+				 
+				  
+				});
+				
+				$.getJSON( "http://www.emporiofashion.4tuna.com.br/wp-content/page_4t_campanha.php", function( data ) {
+				//$.getJSON( "http://www.emporiofashion.4tuna.com.br/wp-content/looks.json", function( data ) {
+				//$.getJSON( "http://www.emporiofashion.4tuna.com.br/wp-content/campanha.json", function( data ) {
+				//$.getJSON( "campanha.json", function( data ) {
+				
+				  var items = [];
+				  $.each( data, function( key, val ) {
+					
+					campanha.push(val);
+					
+					
+				  });
+				 
+				  
+				});
+				
+				$.getJSON( "http://www.emporiofashion.4tuna.com.br/wp-content/page_4t_dicas.php", function( data ) {
+				
+				  var items = [];
+				  $.each( data, function( key, val ) {
+					
+					dicas.push(val);
+					
+					if (val.titulo !== undefined){
+						var dir = 'http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + val.titulo + '_dicas/' + val.imagem;
+						var imgId = 'img' + val.id
+						var desId = 'des' + val.id
+						$('#dvDicas').append('<div class="ui-field-contain"><label onclick="abrirDescricaoDicas(this.id)" id = ' + desId + '>' + val.data + ' - ' + val.titulo +'</label></br><img onclick="abrirDescricaoDicas(this.id)" style="margin-left:-20px" id= ' + imgId + ' src=""/></div>')
+						
+						$('#' + imgId).attr('src',dir)
+						var largura = window.innerWidth -6;
+						$('#' + imgId).css("width",largura + 'px');		
+					}
+					
+					
+					
+					
+				  });
+				 
+				  
+				});
+				
+				 
+			
+				 
+				
+	
+				 
+				 
+		 });
+		
+		
+		//essa carga será do banco em mysql
+		//catalogo, lancamento, destaque
+
+		
+		
+		//loobook
+		//look.push({nome:'Look1', foto:'images/kate-upton.jpg',thumb:'images/kate-uptonT.jpg',ref1:'REF0989',ref2:'REF1098'})
+		//look.push({nome:'Look2',foto:'images/top_modelos.jpg',thumb:'images/top_modelosT.jpg',ref1:'REF1234',ref2:''})
+		//look.push({nome:'Look3',foto:'images/Yasmina_rossi.jpg',thumb:'images/Yasmina_rossiT.jpg',ref1:'REF2345',ref2:'REF0912'})
+		//look.push({nome:'Look4',foto:'images/43.jpg',thumb:'images/23.jpg',ref1:'REF2341',ref2:''})
+		
+		function abrirDescricaoDicas(id)
+		{
+			
+			for (i=0;i<dicas.length;i++)
+			{
+				if (id.replace("img","") == dicas[i].id || id.replace("des","") == dicas[i].id){
+					//alert(dicas[i].descricao)	
+					navigator.notification.alert(
+							dicas[i].descricao,  // message
+							alertDismissed,         // callback
+							'Dica / Info',            // title
+							'OK'                  // buttonName
+						); 
+					return ;
+				}
+			}
+		}
+		
+		var dados = [];
+		var pagina;
+	
+		
+		
+		function carregarAlbum (tipo,cat,sub,genero)
+		{
+			
+			if (localStorage.getItem("revenda") == "true")
+			{
+				visibility = "visible"
+			}else{
+				visibility = "hidden"
+			}
+			
+			var largura = window.innerWidth;
+			largura = (largura / 2) - 25.00;
+			var medidas = "height:" + largura + "px;" + "width:"+ largura + "px";
+			localStorage.setItem("genero",genero);
+			localStorage.setItem("categoria",cat);
+			localStorage.setItem("sub",sub);
+			
+			$('.itens').remove();
+			dados = [];
+			var cont = 0;
+			for (var i=0; i<imagem.length-1  ; i++)
+			{
+				
+				if (tipo == "lancamento" && imagem[i].lancamento == "sim")
+				{
+					
+					localStorage.setItem("pagina","lancamento");
+					$('#iGallery3').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img class="thumb" style=' + medidas + ' " id=' + cont +' onclick="abrirFoto(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + imagem[i].ref + '_thumb/' + imagem[i].thumb +'" /></a><p style="visibility:' + visibility +'" class="preco">R$'+ imagem[i].preco +'</p></li>');
+					dados.push({ref: imagem[i].ref,foto:imagem[i].foto,thumb:imagem[i].thumb,cor:imagem[i].cor,categoria:imagem[i].categoria,sub:imagem[i].sub,genero:imagem[i].genero,destaque:imagem[i].destaque,lancamento:imagem[i].lancamento,preco:imagem[i].preco,lookbook:imagem[i].lookbook});
+					cont+=1;
+				}else if (tipo == "destaque" && imagem[i].destaque == "sim")
+				{
+					
+					localStorage.setItem("pagina","destaque");
+					$('#iGallery2').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img class="thumb"  style=' + medidas + ' id=' + cont +' onclick="abrirFoto(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + imagem[i].ref + '_thumb/' + imagem[i].thumb +'" /></a><p style="visibility:' + visibility +'" class="preco">R$'+ imagem[i].preco +'</p></li>');
+					dados.push({ref: imagem[i].ref,foto:imagem[i].foto,thumb:imagem[i].thumb,cor:imagem[i].cor,categoria:imagem[i].categoria,sub:imagem[i].sub,genero:imagem[i].genero,destaque:imagem[i].destaque,lancamento:imagem[i].lancamento,preco:imagem[i].preco,lookbook:imagem[i].lookbook});
+					cont+=1;
+				}else if (tipo == "catalogo")
+				{
+					if (cat == ""){
+						localStorage.setItem("pagina","catalogo");
+						
+						if (imagem[i].genero == genero && genero !==""){
+							
+							$('#iGallery').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img class="thumb" style=' + medidas + ' id=' + cont +' onclick="abrirFoto(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + imagem[i].ref + '_thumb/' + imagem[i].thumb +'" /></a><p style="visibility:' + visibility +'" class="preco">R$'+ imagem[i].preco +'</p></li>');
+							dados.push({ref: imagem[i].ref,foto:imagem[i].foto,thumb:imagem[i].thumb,cor:imagem[i].cor,categoria:imagem[i].categoria,sub:imagem[i].sub,genero:imagem[i].genero,destaque:imagem[i].destaque,lancamento:imagem[i].lancamento,preco:imagem[i].preco,lookbook:imagem[i].lookbook});
+							cont+=1;
+						}else if (genero==""){
+							$('#iGallery').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img class="thumb" style=' + medidas + ' id=' + cont +' onclick="abrirFoto(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + imagem[i].ref + '_thumb/' + imagem[i].thumb +'" /></a><p style="visibility:' + visibility +'" class="preco">R$'+ imagem[i].preco +'</p></li>');
+							dados.push({ref: imagem[i].ref,foto:imagem[i].foto,thumb:imagem[i].thumb,cor:imagem[i].cor,categoria:imagem[i].categoria,sub:imagem[i].sub,genero:imagem[i].genero,destaque:imagem[i].destaque,lancamento:imagem[i].lancamento,preco:imagem[i].preco,lookbook:imagem[i].lookbook});	
+							cont+=1;
+						}
+						
+						
+					}else if (cat != "" && sub == ""){
+						if (cat == imagem[i].categoria){
+							localStorage.setItem("pagina","catalogo");
+							//localStorage.setItem("categoria",cat);
+							if (imagem[i].genero == genero && genero !==""){
+							//	localStorage.setItem("genero",genero);
+								$('#iGallery').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img class="thumb" style=' + medidas + ' id=' + cont +' onclick="abrirFoto(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + imagem[i].ref + '_thumb/' + imagem[i].thumb +'" /></a><p style="visibility:' + visibility +'" class="preco">R$'+ imagem[i].preco +'</p></li>');
+								dados.push({ref: imagem[i].ref,foto:imagem[i].foto,thumb:imagem[i].thumb,cor:imagem[i].cor,categoria:imagem[i].categoria,sub:imagem[i].sub,genero:imagem[i].genero,destaque:imagem[i].destaque,lancamento:imagem[i].lancamento,preco:imagem[i].preco,lookbook:imagem[i].lookbook});
+								cont+=1;
+							}else if (genero==""){
+								$('#iGallery').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img class="thumb" style=' + medidas + ' id=' + cont +' onclick="abrirFoto(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + imagem[i].ref + '_thumb/' + imagem[i].thumb +'" /></a><p style="visibility:' + visibility +'" class="preco">R$'+ imagem[i].preco +'</p></li>');
+								dados.push({ref: imagem[i].ref,foto:imagem[i].foto,thumb:imagem[i].thumb,cor:imagem[i].cor,categoria:imagem[i].categoria,sub:imagem[i].sub,genero:imagem[i].genero,destaque:imagem[i].destaque,lancamento:imagem[i].lancamento,preco:imagem[i].preco,lookbook:imagem[i].lookbook});	
+								cont+=1;
+							}
+							
+							
+						}
+						
+					}if (cat != "" && sub != ""){
+						if (cat == imagem[i].categoria && sub == imagem[i].sub){
+							localStorage.setItem("pagina","catalogo");
+							//localStorage.setItem("categoria",cat);
+							//localStorage.setItem("sub",sub);
+							if (imagem[i].genero == genero && genero !==""){
+								//localStorage.setItem("genero",genero);
+								$('#iGallery').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img class="thumb" style=' + medidas + ' id=' + cont +' onclick="abrirFoto(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + imagem[i].ref + '_thumb/' + imagem[i].thumb +'" /></a><p style="visibility:' + visibility +'" class="preco">R$'+ imagem[i].preco +'</p></li>');
+								dados.push({ref: imagem[i].ref,foto:imagem[i].foto,thumb:imagem[i].thumb,cor:imagem[i].cor,categoria:imagem[i].categoria,sub:imagem[i].sub,genero:imagem[i].genero,destaque:imagem[i].destaque,lancamento:imagem[i].lancamento,preco:imagem[i].preco,lookbook:imagem[i].lookbook});
+								cont+=1;
+							}else if (genero==""){
+								$('#iGallery').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img class="thumb" style=' + medidas + ' id=' + cont +' onclick="abrirFoto(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + imagem[i].ref + '_thumb/' + imagem[i].thumb +'" /></a><p style="visibility:' + visibility +'" class="preco">R$'+ imagem[i].preco +'</p></li>');
+								dados.push({ref: imagem[i].ref,foto:imagem[i].foto,thumb:imagem[i].thumb,cor:imagem[i].cor,categoria:imagem[i].categoria,sub:imagem[i].sub,genero:imagem[i].genero,destaque:imagem[i].destaque,lancamento:imagem[i].lancamento,preco:imagem[i].preco,lookbook:imagem[i].lookbook});	
+								cont+=1;
+							}
+							
+							
+						}
+					}
+				}
+				
+			}
+			
+			localStorage.setItem("album",JSON.stringify(dados));
+			
+		}
+		
+		function carregarBusca (texto)
+		{
+			
+			if (localStorage.getItem("revenda") == "true")
+			{
+				visibility = "visible"
+			}else{
+				visibility = "hidden"
+			}
+			
+			var largura = window.innerWidth;
+			largura = (largura / 2) - 25.00;
+			var medidas = "height:" + largura + "px;" + "width:"+ largura + "px";
+			
+			
+			$('.itens').remove();
+			dados = [];
+			var cont = 0;
+			for (var i=0; i<imagem.length-1  ; i++)
+			{
+				
+				if (removerAcentos(imagem[i].ref).toUpperCase().indexOf(texto) >= 0 || 
+				removerAcentos(imagem[i].cor).toUpperCase().indexOf(texto)>=0 || 
+				removerAcentos(imagem[i].categoria).toUpperCase().indexOf(texto)>=0 ||
+				removerAcentos(imagem[i].sub).toUpperCase().indexOf(texto)>=0 ||
+				removerAcentos(imagem[i].genero).toUpperCase().indexOf(texto)>=0)
+				{
+					
+					localStorage.setItem("pagina","busca");
+					$('#iGallery9').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img class="thumb" style=' + medidas + ' " id=' + cont +' onclick="abrirFoto(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + imagem[i].ref + '_thumb/' + imagem[i].thumb +'" /></a><p style="visibility:' + visibility +'" class="preco">R$'+ imagem[i].preco +'</p></li>');
+					dados.push({ref: imagem[i].ref,foto:imagem[i].foto,thumb:imagem[i].thumb,cor:imagem[i].cor,categoria:imagem[i].categoria,sub:imagem[i].sub,genero:imagem[i].genero,destaque:imagem[i].destaque,lancamento:imagem[i].lancamento,preco:imagem[i].preco,lookbook:imagem[i].lookbook});
+					cont+=1;
+				}
+			}
+			
+			localStorage.setItem("album",JSON.stringify(dados));
+			
+		}
+		
+		
+
+		
+		function carregarLook ()
+		{
+			$('#iGallery4 .itens').remove();
+			looks = [];
+			var largura = window.innerWidth;
+			largura = (largura / 2) - 25.00;
+			var medidas = "height:" + largura + "px;" + "width:"+ largura + "px";
+			localStorage.setItem("categoria","");
+			localStorage.setItem("sub","");
+			var cont = 0;
+			for (var i=0; i<look.length-1  ; i++)
+			{
+				
+			
+					localStorage.setItem("pagina","catalogo");
+					$('#iGallery4').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img style=' + medidas + ' class="thumb" id=' + cont +' onclick="abrirLook(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + look[i].ref + '_look_thumb/' + look[i].thumb +'" /></a></li>');
+					looks.push({foto:look[i].foto,thumb:look[i].thumb,ref:look[i].ref});
+					cont+=1;
+				
+				
+			}
+			
+			localStorage.setItem("look",JSON.stringify(looks));
+			
+		}
+		
+		function carregarCampanha ()
+		{
+			$('#iGallery6 .itens').remove();
+			cmp = [];
+			var largura = window.innerWidth;
+			largura = (largura / 2) - 25.00;
+			var medidas = "height:" + largura + "px;" + "width:"+ largura + "px";
+			localStorage.setItem("categoria","");
+			localStorage.setItem("sub","");
+			var cont = 0;
+			for (var i=0; i<campanha.length-1  ; i++)
+			{
+				
+			
+					localStorage.setItem("pagina","catalogo");
+					$('#iGallery6').append('<li class="itens"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#"><img style=' + medidas + ' class="thumb" id=' + cont +' onclick="abrirCampanha(this.id)" src="http://www.emporiofashion.4tuna.com.br/wp-content/uploads/2016/' + campanha[i].ref + '_campanha_thumb/' + campanha[i].thumb +'" /></a></li>');
+					cmp.push({foto:campanha[i].foto,thumb:campanha[i].thumb,ref:campanha[i].ref});
+					cont+=1;
+				
+				
+			}
+			
+			localStorage.setItem("campanha",JSON.stringify(cmp));
+			
+		}
+		
+		function abrirFoto(id)
+		{
+			
+			
+			localStorage.setItem("pos",parseInt(id));
+			location.href= "foto.html";
+			
+		}
+		
+		function abrirLook(id)
+		{
+			
+			
+			localStorage.setItem("posLook",parseInt(id));
+			location.href= "look.html";
+			
+		}
+		
+					
+		function abrirCampanha(id)
+		{
+			
+			
+			localStorage.setItem("posCampanha",parseInt(id));
+			location.href= "campanha.html";
+			
+		}
+		
+		
+		
+		document.addEventListener("deviceready", onDeviceReady, false)
+
+        function onDeviceReady() {
+                FastClick.attach(document.body);
+				try{
+					var push = PushNotification.init({
+					
+					android: {
+						senderID: "264359072592"
+					},
+					browser: {
+						pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+					},
+					ios: {
+						alert: "true",
+						badge: "true",
+						sound: "true"
+					},
+					windows: {}
+					});
+
+					push.on('registration', function(data) {
+						
+												
+						var id=localStorage.getItem("idUser");
+						var regID = data.registrationId;
+						
+						var dataString="id="+id+"&regID="+regID+"&update=";
+						  $.ajax({
+							 type: "POST",
+							 //url:"http://www.emporiofashion.4tuna.com.br/cadastro-app-users/",
+							 url : "http://www.emporiofashion.4tuna.com.br/wp-content/page-gravaregid.php",
+							 data: dataString,
+							 crossDomain: true,
+							 cache: false,
+							  success: function(data){
+							
+							 }
+							 });
+					});
+
+					push.on('notification', function(data) {
+						//alert('oi2');
+						//alert(data.message);
+						navigator.notification.alert(
+							data.message,  // message
+							alertDismissed,         // callback
+							'Notificação',            // title
+							'OK'                  // buttonName
+						); 	
+						// data.title,
+						// data.count,
+						// data.sound,
+						// data.image,
+						// data.additionalData
+					});
+
+					push.on('error', function(e) {
+						//alert('iiii');
+						alert (e.message)
+					});
+				}catch(ex){
+					alert(ex.message)
+				}
+				
+        }
+			
+			
+		function esconderMenu()
+		{
+			jQuery("#menuL").trigger('click')
+		}			
+		
+		function buscar()
+		{
+			var pagina;
+		}
+			
+					
+		function mapa()
+		{
+			location.href="mapa.html";
+		}
+		
+		function montarPerfil()
+		{
+			if (localStorage.getItem("revenda") == "true"){
+				
+				
+			}else{
+				
+							
+			}
+			
+		}
+		
+		function removerAcentos( newStringComAcento ) {
+				  var string = newStringComAcento;
+					var mapaAcentosHex 	= {
+						a : /[\xE0-\xE6]/g,
+						e : /[\xE8-\xEB]/g,
+						i : /[\xEC-\xEF]/g,
+						o : /[\xF2-\xF6]/g,
+						u : /[\xF9-\xFC]/g,
+						c : /\xE7/g,
+						n : /\xF1/g
+					};
+
+					for ( var letra in mapaAcentosHex ) {
+						var expressaoRegular = mapaAcentosHex[letra];
+						string = string.replace( expressaoRegular, letra );
+					}
+
+					return string;
+		}
+		
+	</script>
+	
+	
+
+</head>
+<body>
+	
+<!-- 	<div id="slidemenu">
+
+		<h3 onclick="esconderMenu()">MENU</h3>
+
+		<ul>
+			<li><img src="img/catalogo.png" style="float: left;margin-top: 6px;margin-left: 4px"><a id "ctg" href="#catalogo" onclick="carregarAlbum('catalogo')">catálogo</a></li>
+			<li><img src="img/lookbook.png" style="float: left;margin-top: 6px;margin-left: 1px"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#lookbook" onclick="carregarLook()">Look Book</a></li>
+			<li><img src="img/campanha.png" style="float: left;margin-top: 6px;margin-left: 6px"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#campanha">Campanha</a></li>
+			<li><img src="img/destaque.png" style="float: left;margin-top: 6px;margin-left: 4px"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#destaque" onclick="carregarAlbum('destaque')">destaque</a></li>
+			<li><img src="img/info.png" style="float: left;margin-top: 6px;margin-left: 4px"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#dicas">Dicas e Informações</a></li>
+			<li><img src="img/lancamento.png" style="float: left;margin-top: 6px;margin-left: 4px"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#lancamento" onclick="carregarAlbum('lancamento')">Lançamentos da Semana</a></li>
+			<li><img src="img/pin.png" style="float: left;margin-top: 6px;margin-left: 4px"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#" onclick="mapa()">Encontre Revendedores</a></li>
+			<li><img src="img/contato.png" style="float: left;margin-top: 6px;margin-left: 4px"><a style="display:table;font-size:25px;color:#666362 ;width:100%" href="#contato">Contato</a></li>
+			
+			
+		</ul>
+		
+
+	</div> -->
+
+
+	<div data-role="page" id="menu" data-theme="c">
+
+		<div id="afui">
+			<div id="header" class="header" style="height: 88px;"> 
+				<header data-parent="page1" style="transform: translate3d(0px, 0px, 0px) scale(1) rotate(0deg) rotateY(0deg) skew(0deg, 0deg); backface-visibility: hidden; opacity: 1; transition-property: all; transition-duration: 230ms; transition-timing-function: linear; transform-origin: 0% 0% 0px;">
+						<h1>Home</h1>
+						<br><br>
+						
+						<input type="search" name="search" id="search-basic" value="" placeholder="Digite o remédio para busca" />
+				</header>
+			</div>
+			<div data-role="content" id="content">
+				
+			</div>
+			
+			
+			<div id="navbar" class="tab footer">
+				<footer id="defaultNav"><a href="#menu" id="tab1" class="icon home pressed" data-transition="none" onclick=$(".header").css("height","88px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Home</a><a href="#favoritos" id="tab2" class="icon heart" data-transition="none" onclick=$(".header").css("height","44px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Favoritos</a><a href="#pedidos" id="tab3" class="icon chat" data-transition="none" onclick=$(".header").css("height","44px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Pedidos</a><a href="#perfil" id="tab4" class="icon user" data-transition="none" onclick=$(".header").css("height","44px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Perfil</a></footer>
+			</div>		
+		</div>
+
+			
+
+	</div>
+	
+	<div data-role="page" id="favoritos" data-theme="c">
+
+		<div id="afui">
+			<div id="header" class="header" style="height: 88px;"> 
+				<header data-parent="page1" style="transform: translate3d(0px, 0px, 0px) scale(1) rotate(0deg) rotateY(0deg) skew(0deg, 0deg); backface-visibility: hidden; opacity: 1; transition-property: all; transition-duration: 230ms; transition-timing-function: linear; transform-origin: 0% 0% 0px;">
+						<h1>Favoritos</h1>
+						<br><br>
+						<input placeholder="Digite o remédio para busca" type="search">
+				</header>
+			</div>
+			<div data-role="content" id="content">
+				
+			</div>
+			
+			
+			<div data-role="footer"> 
+				<h4>Footer content</h4> 
+			</div> 	
+		</div>
+
+			
+
+	</div>
+	
+	<div data-role="page" id="pedidos" data-theme="c">
+
+		<div id="afui">
+			<div id="header" class="header" style="height: 88px;"> 
+				<header data-parent="page1" style="transform: translate3d(0px, 0px, 0px) scale(1) rotate(0deg) rotateY(0deg) skew(0deg, 0deg); backface-visibility: hidden; opacity: 1; transition-property: all; transition-duration: 230ms; transition-timing-function: linear; transform-origin: 0% 0% 0px;">
+						<h1>Pedidos</h1>
+						<br><br>
+						<input placeholder="Digite o remédio para busca" type="search">
+				</header>
+			</div>
+			<div data-role="content" id="content">
+				
+			</div>
+			
+			
+			<div id="navbar" class="tab footer">
+				<footer id="defaultNav"><a href="#menu" id="tab1" class="icon home pressed" data-transition="none" onclick=$(".header").css("height","88px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Home</a><a href="#favoritos" id="tab2" class="icon heart" data-transition="none" onclick=$(".header").css("height","44px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Favoritos</a><a href="#pedidos" id="tab3" class="icon chat" data-transition="none" onclick=$(".header").css("height","44px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Pedidos</a><a href="#perfil" id="tab4" class="icon user" data-transition="none" onclick=$(".header").css("height","44px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Perfil</a></footer>
+			</div>
+		</div>
+
+			
+
+	</div>
+	
+	
+	<div data-role="page" id="perfil" data-theme="c">
+
+		<div id="afui">
+			<div id="header" class="header" style="height: 88px;"> 
+				<header data-parent="page1" style="transform: translate3d(0px, 0px, 0px) scale(1) rotate(0deg) rotateY(0deg) skew(0deg, 0deg); backface-visibility: hidden; opacity: 1; transition-property: all; transition-duration: 230ms; transition-timing-function: linear; transform-origin: 0% 0% 0px;">
+						<h1>Perfil</h1>
+						<br><br>
+						<input placeholder="Digite o remédio para busca" type="search">
+				</header>
+			</div>
+			<div data-role="content" id="content">
+				
+			</div>
+			
+			
+			<div id="navbar" class="tab footer">
+				<footer id="defaultNav"><a href="#menu" id="tab1" class="icon home pressed" data-transition="none" onclick=$(".header").css("height","88px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Home</a><a href="#favoritos" id="tab2" class="icon heart" data-transition="none" onclick=$(".header").css("height","44px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Favoritos</a><a href="#pedidos" id="tab3" class="icon chat" data-transition="none" onclick=$(".header").css("height","44px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Pedidos</a><a href="#perfil" id="tab4" class="icon user" data-transition="none" onclick=$(".header").css("height","44px") data-ignore-pressed="true" data-resethistory="true" style="width: 25%;">Perfil</a></footer>
+			</div>
+		</div>
+
+			
+
+	</div>	
+	
+
+	
+	
+	<script>
+		
+	</script>	
+	
+</body>
+
+	
+
+</html>

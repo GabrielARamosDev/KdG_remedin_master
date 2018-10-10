@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+
+	<title>Produtos</title>
+
+	<!--Include JQM and JQ--->
+	<script src="cordova.js"></script>	
+	<script src="js/fastclick.js"></script>
+	<script src="js/jquery-1.11.3.min.js"></script>
+	  <!-- Include the jQuery library -->
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <!-- Include the jQuery Mobile library -->
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+	<script src="js/ctrlProdutos.js"></script>
+	
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" type="text/css" href="css/icons.css" />
+
+	<script>
+ 
+		//script para pegar o estado do usuário
+		var queryString = decodeURIComponent(window.location.search);
+		queryString = queryString.substring(1);
+
+		var queries = queryString.split("&");
+
+		for (var i = 0; i < queries.length; i++) {
+			document.write(queries[i] + "<br>");
+		}
+
+		console.log(queries);
+
+		var qrs = queries[0];
+		var res1 = qrs.charAt(6);
+		var res2 = qrs.charAt(7);
+
+		state = res1 + res2;
+		document.getElementById("state").innerHTML = state;
+
+		console.log(state);
+
+			//define cada cálculo de ICMS pelo estado (tabela 1)
+				if (state == "RJ") {
+
+					var icms = 20;
+					var precoX = 30;										
+					var precoY = precoX + (precoX/100)*icms;
+
+					console.log('Você está no estado do ' + state + ' e o ICMS é de ' + icms + '%.');
+					console.log('Valor exemplo de tabela do produto: ' + precoX + '.');
+					console.log('Valor exemplo corrigido por ICMS: ' + precoY + '.');
+
+					document.getElementById('icms').innerHTML = icms;
+
+				} else {
+
+					//define cada cálculo de ICMS pelo estado (tabela 2)
+					if (state == "AP","AM","BA","CE","MA","MG","PI","PR","PB","PE","RN","RS","SP","SE","TO") {
+
+						var icms = 18;
+						var precoX = 30;										
+						var precoY = precoX + (precoX/100)*icms;
+
+						console.log('Você está no estado do ' + state + ' e o ICMS é de ' + icms + '%.');
+						console.log('Valor exemplo de tabela do produto: ' + precoX + '.');
+						console.log('Valor exemplo corrigido por ICMS: ' + precoY + '.');
+
+						document.getElementById('icms').innerHTML = icms;
+
+					} else {
+
+						//define cada cálculo de ICMS pelo estado (tabela 3)
+						if (state == "AC","AL","DF","ES","GO","MT","MS","PA","RR","SC") {
+
+							var icms = 17;
+							var precoX = 30;										
+							var precoY = precoX + (precoX/100)*icms;
+
+							console.log('Você está no estado do ' + state + ' e o ICMS é de ' + icms + '%.');
+							console.log('Valor exemplo de tabela do produto: ' + precoX + '.');
+							console.log('Valor exemplo corrigido por ICMS: ' + precoY + '.');
+							
+							document.getElementById('icms').innerHTML = icms;
+
+						} else {
+
+							//define cada cálculo de ICMS pelo estado (tabela 4) - medicamentos genéricos MG e SP
+							if (state == "MG","SP") {
+
+								var icms = 12;
+								var precoX = 30;										
+								var precoY = precoX + (precoX/100)*icms;
+
+								console.log('Você está no estado do ' + state + ' e o ICMS é de ' + icms + '%.');
+								console.log('Valor exemplo de tabela do produto: ' + precoX + '.');
+								console.log('Valor exemplo corrigido por ICMS: ' + precoY + '.');
+								document.getElementById('icms').innerHTML = icms;
+
+							}
+						}
+					}
+				}
+
+				//define cada cálculo de ICMS pelo estado (tabela 1)
+				if (state == "RJ") {
+
+					//pega o preço da tabela da anvisa para cálculo
+
+					var icms = 20;
+					var precoV = 14.02;
+					var precoT = precoV + (precoV/100)*icms;
+					prArr = parseFloat(precoT.toFixed(2));
+
+					document.getElementById("prArr").innerHTML = "R$" + prArr;
+
+				} else {
+
+					//define cada cálculo de ICMS pelo estado (tabela 2)
+					if (state == "AP","AM","BA","CE","MA","MG","PI","PR","PB","PE","RN","RS","SP","SE","TO") {
+
+						//pega o preço da tabela da anvisa para cálculo
+
+						var icms = 18;
+						var precoV = 14.02;
+						var precoT = precoV + (precoV/100)*icms;
+						prArr = parseFloat(precoT.toFixed(2));
+
+						document.getElementById("prArr").innerHTML = "R$" + prArr;
+
+					} else {
+
+						//define cada cálculo de ICMS pelo estado (tabela 3)
+						if (state == "AC","AL","DF","ES","GO","MT","MS","PA","RR","SC") {
+
+							//pega o preço da tabela da anvisa para cálculo
+
+							var icms = 17;
+							var precoV = 14.02;
+							var precoT = precoV + (precoV/100)*icms;
+							prArr = parseFloat(precoT.toFixed(2));
+
+							document.getElementById("prArr").innerHTML = "R$" + prArr;
+
+						} else {
+
+							//define cada cálculo de ICMS pelo estado (tabela 4) - medicamentos genéricos MG e SP
+							if (state == "MG","SP") {
+
+								//pega o preço da tabela da anvisa para cálculo
+
+								var icms = 12;
+								var precoV = 14.02;
+								var precoT = precoV + (precoV/100)*icms;
+								prArr = parseFloat(precoT.toFixed(2));
+
+								document.getElementById("prArr").innerHTML = "R$" + prArr;
+							}
+						}
+					}
+				}
+
+</script>
+
+</head>
+<body ng-app="produtos" ng-controller="ctrlProdutos" ng-init="carregar(buscaini)">
+	
+	<div data-role="page" id="pageone">
+	
+	  <div data-role="header" class="header header-wrap " >
+		<img src="img/back.png" class="back" onclick="location.href='indexA.html'"/>
+		<div style="font-size: 10px">
+			<h1>Remedins e Produtins</h1>
+		</div>
+		<input type="search" id="busca" class="search" placeholder="Busque por medicamentos"  name="search" id="search-basic" ng-model="campobusca" ng-keydown="keydown($event)" value="" />
+	  </div>
+	  <!-- <img class = "aguarde" src="img/aguarde.gif"/> -->
+	  
+	  <div id ="dvBusca" data-role="main" class="ui-content" style="margin-top:100px">
+		<div class="content-primary">	
+			
+			<ul data-role="listview" id="listview" >
+				<li role="heading" data-role="list-divider">
+					<div class="titulo">
+						<h5 id="encontrado" ng-bind="textobusca"> </h5>
+					</div>
+				</li>
+					
+				<li ng-repeat="rem in remedios" class="itRemedios" style="padding-left: 8px;">
+					<p class="wrap1" ng-attr-id = "{{'p' + $index}}">{{rem.nome}}</p>
+					<p class="wrap2" >{{rem.bula}}</p>
+					<p class="wrap2" ng-attr-id = "{{'d' + $index}}">{{rem.dosagem}}</p>
+					<p class="wrap2" ng-attr-id = "{{'pr' + $index}}">{{rem.preco}}</p>
+					<a style="background: rgb(196, 0, 0); border-color: rgb(255, 35, 35)" class="wrap4 ui-btn blista" ng-attr-id = "{{$index}}" href="#" ng-click="adicionarLista($event)">Adicionar a lista</a>
+				</li>
+			</ul>
+			<script>
+				setInterval(function(){ if ($('.wrap1').html() == "Remédio não encontrado") $('.blista').remove(); }, 100);
+			</script>
+		
+		 </div>
+		
+	  </div>
+
+	  <div data-role="footer"  data-id="foo1" data-position="fixed" style="border: none;">
+			<!--<h1 onclick="location.href='produtos.html#lista';localStorage.setItem('listaHome','false')">Visualizar Lista</h1>-->
+		     <div data-role="navbar" data-iconpos="top">
+				<ul>
+				  <!-- <li><a href="indexA.html" onclick="location.href='indexA.html'" data-icon="home" class="rodape" style="font-size: 11px">Farmácias</a></li> -->
+				  <li><a href="indexA.html"  id="aBusca" data-icon="search" class="rodape ui-btn-active" style="font-size: 11px">Busca</a></li>
+				  <li><a href="produtos.html#lista" onclick="location.href='produtos.html#lista'" data-icon="shop" class="rodape " style="font-size: 11px">Ver lista</a></li>
+				  <li><a href="produtos.html#perfil" data-ajax="false" class="rodape" data-icon="user" onclick="$('#aPerfil').addClass('ui-btn-active');verificaLogin()" style="font-size: 11px">Perfil</a></li>
+				  
+				  <!-- <li><a href="produtos.html" data-icon="search" class="rodape " onclick="$('#aBusca').addClass('ui-btn-active');">Busca</a></li>
+				  <li><a href="produtos.html#lista" data-icon="shop" class="rodape" onclick="$('#aLista').addClass('ui-btn-active'); calcularTam()">Ver lista</a></li>
+				  <li><a href="produtos.html#perfil" data-ajax="false" id="aPerfil" class="rodape" data-icon="user">Perfil</a></li> -->
+				</ul>
+			  </div>
+		 	 <script>
+					function calcularTam(){
+						if ($(window).width() < 340)
+							$('.qtd').css('width','1px');
+					}
+			  </script>
+	  </div> 		
+
+	  		
+	</div> 
+	
+	
+	<div data-role="page" id="lista">
+	  <div data-role="header" class="header">
+<!--		<img src="img/back.png" class="back" onclick="voltarLista()"/>-->
+	
+		<h1>Lista</h1>
+		
+	  </div>
+
+	  <div data-role="main" class="ui-content">
+		<div class="content-primary">	
+		
+	  
+		 <ul data-role="listview" id="listaView">
+			  <h2 class="listaVazia" style="display:none; text-align: center">Sua lista está vazia.</h2>
+			  <li ng-repeat="list in lista" class="ui-li-static ui-body-inherit ui-last-child">
+				<h2 class="hLista">{{list.nome}}</h2>
+				<p style="font-size: 12px; color: #545454; word-break: normal">{{list.dosagem}}</p>
+
+				<div data-role="controlgroup" class="ui-controlgroup ui-controlgroup-horizontal ui-corner-all" data-type="horizontal">
+				  
+				  <div style="margin-left: 47.5%" class="ui-controlgroup-controls">
+					  <a href="#" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child qtd"  data-role="button"  data-iconpos="right" ng-click="list.qtd =  list.qtd == 1 ? removeItem($index) : list.qtd - 1;atualizaLista()">-</a>
+					  <a id ="qtd1" class="ui-link ui-btn ui-shadow ui-corner-all qtd" href="#"  data-role="button" data-icon="">{{list.qtd}}</a>
+					  <a href="#" class="ui-link ui-btn ui-shadow ui-corner-all ui-last-child qtd"  data-role="button"  data-iconpos="left" ng-click="list.qtd = list.qtd + 1;atualizaLista()">+</a>
+				  </div>
+				</div>
+				
+			  </li>
+					  
+		</ul>
+	 
+		</div> 
+	
+	  </div>
+	
+	<!-- <div class="loadersmall"></div>  
+	<div data-role="footer" id="footer" class ="ftLista">
+		<h1 onclick="location.href='produtos.html#orcamento'" ng-click="carregarOrcamento()">Gerar Orçamento</h1>
+		<script>
+			
+		</script>
+	 </div> -->
+		  <div data-role="footer"  data-id="foo1" data-position="fixed" style="border: none;">
+			<!--<h1 onclick="location.href='produtos.html#lista';localStorage.setItem('listaHome','false')">Visualizar Lista</h1>-->
+			  
+		     <div data-role="navbar" data-iconpos="top">
+				 <a style="background-color: rgb(196, 0, 0); margin-bottom: 1em" href="produtos.html#orcamento" ng-click="carregarOrcamento()" id="btnOrcamento">Orçamento</a>
+				 <ul>
+						<!-- <li><a href="indexA.html" onclick="location.href='indexA.html'" data-icon="home" class="rodape" style="font-size: 11px">Farmácias</a></li> -->
+						<li><a href="indexA.html"  id="aBusca" data-icon="search" class="rodape ui-btn-active" style="font-size: 11px">Busca</a></li>
+						<li><a href="produtos.html#lista" onclick="location.href='produtos.html#lista'" data-icon="shop" class="rodape " style="font-size: 11px">Ver lista</a></li>
+						<li><a href="produtos.html#perfil" data-ajax="false" class="rodape" data-icon="user" onclick="$('#aPerfil').addClass('ui-btn-active');verificaLogin()" style="font-size: 11px">Perfil</a></li>
+						
+						<!-- <li><a href="produtos.html" data-icon="search" class="rodape " onclick="$('#aBusca').addClass('ui-btn-active');">Busca</a></li>
+						<li><a href="produtos.html#lista" data-icon="shop" class="rodape" onclick="$('#aLista').addClass('ui-btn-active'); calcularTam()">Ver lista</a></li>
+						<li><a href="produtos.html#perfil" data-ajax="false" id="aPerfil" class="rodape" data-icon="user">Perfil</a></li> -->
+					  </ul>
+			  </div>
+			  <script>
+					$('#aLista').addClass('ui-btn-active');
+			  </script>
+	  </div> 
+	</div>
+	
+	<div data-role="page" id="orcamento" onload="$('a').removeClass('ui-shadow')">
+	  <div data-role="header" class="header header-wrap" >
+		<img src="img/back.png" class="back" onclick="history.back();$('#aLista').addClass('ui-btn-active')"/>
+		<h1>Farmácias</h1>
+	  </div>
+
+	  <div id ="dvOrcamento" data-role="main" class="ui-content" style="margin-top:20px">
+		<div style="margin-top: 1.75em" class="content-primary">	
+			<ul data-role="listview" id="listview" >
+				<li ng-repeat="f in farmacias" class="itRemedios" style="padding-left: 8px;">
+					<p class="wrap1" ng-attr-id = "{{'p' + $index}}">{{f.nome}}</p>
+					<p class="wrap2 orcamento" style="color:red">R$ {{f.total.toString().replace(".",",")}}</p>
+					<ul data-role="listview"  >
+						<li ng-repeat="l in f.lista" class="itRemedios" style="padding-left: 8px;">
+							<p class="wrap2" style="font-size:14px">{{l.remedio}} : {{l.total.toString().replace(".",",")}} </p>
+						</li>
+					</ul>	
+					<a class="wrap4 ui-btn orcamento" ng-attr-id = "{{$index}}" href="#" ng-click="fazerPedido(f.nome)">Fazer Pedido</a>
+				</li>
+			</ul>
+		 </div>
+	  </div>
+	</div>
+	
+	<div data-role="page" id="perfil">
+	  <div data-role="header" class="header" >
+	  	<h1>Perfil</h1>
+	  </div>
+
+	  <div data-role="main" class="ui-content">
+		<div class="content-primary">	
+			<div id="botoes">
+				<input value="Editar" type="button" onclick="location.href='cadastro.html';localStorage.setItem('tPedido',2)">
+				<input value="Sair" type="button" onclick="sair()">
+				<!-- <a style="margin-left: 3.25em; background: rgb(196, 0, 0); border-color: rgb(255, 35, 35)" value="Editar" class="wrap4 ui-btn blista" onclick="location.href='cadastro.html';localStorage.setItem('tPedido',2)">Editar</a>
+				<a style="margin-left: 3.25em; background: rgb(196, 0, 0); border-color: rgb(255, 35, 35)" value="Sair" class="wrap4 ui-btn blista" onclick="sair()">Sair</a> -->
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<!-- <a class="docsLink1" type="button" onclick="location.href='../app_remedin_gamba/docs/POLÍTICA DE PRIVACIDADE DO REMEDIN.pdf'">Políticas de Privacidade</a>
+				<br>
+				<a class="docsLink2" type="button" onclick="location.href='../app_remedin_gamba/docs/TERMOS E CONDIÇÕES DE USO REMEDIN APP.pdf'">Termos e Condições de Uso</a> -->
+				<div class="docs">
+					<a class="docsLink" type="button" onclick="location.href='politicas.html'">Política de Privacidade</a>
+					<br>
+					<a class="docsLink" type="button" onclick="location.href='termosUso.html'">Termos e Condições de Uso</a>
+				</div>
+			</div>
+			<div id="aviso" style="display:none">
+				<p>Para criação de login, realize antes um pedido.</p>
+			</div>
+		
+		</div> 
+		  <div data-role="footer"  data-id="foo1" data-position="fixed" style="border: none;">
+			<!--<h1 onclick="location.href='produtos.html#lista';localStorage.setItem('listaHome','false')">Visualizar Lista</h1>-->
+		     <div data-role="navbar" data-iconpos="top">
+				<ul>
+				  <!-- <li><a href="indexA.html" onclick="location.href='indexA.html'" data-icon="home" class="rodape" style="font-size: 11px">Farmácias</a></li> -->
+				  <li><a href="indexA.html"  id="aBusca" data-icon="search" class="rodape ui-btn-active" style="font-size: 11px">Busca</a></li>
+				  <li><a href="produtos.html#lista" onclick="location.href='produtos.html#lista'" data-icon="shop" class="rodape " style="font-size: 11px">Ver lista</a></li>
+				  <li><a href="produtos.html#perfil" data-ajax="false" class="rodape" data-icon="user" onclick="$('#aPerfil').addClass('ui-btn-active');verificaLogin()" style="font-size: 11px">Perfil</a></li>
+				  
+				  <!-- <li><a href="produtos.html" data-icon="search" class="rodape " onclick="$('#aBusca').addClass('ui-btn-active');">Busca</a></li>
+				  <li><a href="produtos.html#lista" data-icon="shop" class="rodape" onclick="$('#aLista').addClass('ui-btn-active'); calcularTam()">Ver lista</a></li>
+				  <li><a href="produtos.html#perfil" data-ajax="false" id="aPerfil" class="rodape" data-icon="user">Perfil</a></li> -->
+				</ul>
+			  </div>
+		 	 <script>
+					function calcularTam(){
+						if ($(window).width() < 340)
+							$('.qtd').css('width','1px');
+					}
+			  </script>
+	  		</div> 	
+	  </div>
+	</div>
+	
+	<div data-role="page" id="acompanhamento">
+	  <div data-role="header" class="header" >
+			
+		<h1 style="font-size:14px">Acompanhamento</h1>
+		
+	  </div>
+
+	  <div data-role="main" class="ui-content">
+		<div class="content-primary" ng-init="retornarStatusPedido()">		  
+		 <div style="text-align:center">
+			 <p id="endereco" ng-bind="endereco"></p>
+		
+			 <a href="#" data-role="button" data-inline="true" class="btnIcone"></a>
+			 <p data-role="button" data-inline="true" class="icone">Pedido enviado com sucesso</p>
+			 <p id="btnPendente" data-role="button"  style="color:red">Aguardando confirmação</p>
+			 
+             <p class="btnLiberado"  data-role="button" data-inline="true" class="icone" style="display:none">Pedido confirmado. Em breve será entregue.</p>
+			 
+			 <a style="text-align: center; margin-left: 17.5%;margin-top: 2em" class="wrap4 ui-btn orcamento" onclick="location.href='indexA.html'">Voltar para a página inicial</a>
+			 
+		 </div>
+	 	 <script>
+			 setInterval(function(){ 
+				 $('#endereco').html('Endereço: ' + localStorage.getItem('endereco')); 
+			 }, 1000);
+		 </script>
+		</div> 
+	
+	  </div>
+	<!-- <div class="loadersmall"></div>  -->
+
+	</div>
+	
+	
+	<div data-role="page" id="confirmacao">
+	  <div data-role="header" class="header" >
+		<img src="img/back.png" class="back" onclick="history.back();"/>
+	
+		<h1>Confirmação</h1>
+		
+	  </div>
+
+	  <div data-role="main" class="ui-content">
+		<div class="content-primary">	
+			 <div style="text-align:center">
+				 <div class="ui-field-contain">
+					 <p for="c_endereco" ng-bind="fcompra"></p>
+				 	<textarea type="text" id="c_endereco" class=""  name="c_endereco" ng-model="c_endereco"  value="" style="margin-left:2%;width:95%"></textarea>
+				 </div>
+				 <div class="ui-field-contain">
+					<p for="email">Forma de pagamento:</p>
+					 <select  id = "forma" name="forma" required>
+						 <option value="">Selecione</option>
+						 <option value="Cartão" onchange="$('#dvTroco').css('display','none')">Cartão</option>
+						 <option value="Dinheiro" onchange="$('#dvTroco').css('display','block')">Dinheiro</option>
+						 <script>
+							 var t = setInterval(function(){ 
+								$('#c_endereco').val(localStorage.getItem('endereco'));
+								 if ($('#forma').val() == "Dinheiro") {
+									 $('#dvTroco').css('display','block') 
+								 }else{
+									 $('#dvTroco').css('display','none')
+								 } clearInterval(t);}, 700);
+							 
+							 	setInterval(function(){ 
+								
+								 if ($('#forma').val() == "Dinheiro") {
+									 $('#dvTroco').css('display','block') 
+								 }else{
+									 $('#dvTroco').css('display','none')
+								 } }, 700);
+						 </script>
+					 </select>
+				</div>
+				 <div class="ui-field-contain" id="dvTroco" style="display:none">
+					<p for="email">Troco para quanto?</p>
+					<input type="text" id="troco" class=""  name="troco"  value="">
+				</div>
+				 <a href="#" id="btnConfirma" data-role="button" data-inline="true" class="btnIcone" ng-click="confirmaPedido()" style="height: 20px;">Concluir Compra</a>
+				 <a href="#" data-role="button" data-inline="true" class="btnIcone" onclick="location.href='produtos.html'" style="height: 20px;">Cancela</a>
+			 </div>
+	 
+		</div> 
+	
+	  </div>
+	</div>
+	
+</body>
+
+<style>
+	.dele3te{
+		border-left-width: 1px !important;
+		border-top-left-radius: inherit  !important;
+		border-bottom-left-radius: inherit  !important;
+		margin-left: 12px  !important;
+		border-color: red  !important;
+		border: solid  !important;
+		border-width: 1px  !important;
+		border-color: red  !important;
+	}
+	.icone{
+		
+		display: inline-block;
+		
+		line-height: 20px;
+
+	}
+	
+	.rodape{
+		
+		background:#f9f9f9;
+		color: #545454;
+	}
+	
+	.ui-btn-active {
+		background:#3AA1B7 !important;
+		color: white !important;
+		
+	}
+	
+	#btnOrcamento{
+		width: 100%;
+		height: 25px;
+		bottom: -7px;
+		font-size: 20px;
+		padding-left: 0px;
+	}
+	
+	.btnIcone{
+		
+		display: inline-block;
+		height: 5px;
+		line-height: 20px;
+		border-radius: 60px !important;
+		background: #3AA1B7;
+	}
+	
+	.btnLiberado{
+		display:none
+	}
+
+	.docsLink {
+		  font-size: 10px;
+		  color: #3AA1B7;
+		  background: none;
+		  border: none;
+	}
+
+	.docs {
+		text-align: center;
+        left: 0;
+        bottom: 1;
+        position: fixed;
+        color: rgb(37, 119, 188);
+        width: 100%;
+        height: 3em; 
+	}
+	
+</style>
+
+</html>

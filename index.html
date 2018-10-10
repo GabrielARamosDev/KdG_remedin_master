@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+
+
+	<title>Remedin</title>
+
+	<!--Include JQM and JQ2-->
+	<script src="cordova.js"></script>	
+	<script src="js/fastclick.js"></script>
+	<!-- <link rel="stylesheet" href="css/themes/jqmfb.min.css" /> -->
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript" src="js/GALocalStorage.js"></script>
+	<!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false"></script> -->
+
+	<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ&callback=initMap" type="text/javascript"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ&libraries=places&callback=initMap" type="text/javascript"></script> -->
+	
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ&libraries=places"></script>
+
+	<link rel="stylesheet" type="text/css" href="css/icons.css" />
+	<link rel="stylesheet"  href="css/jqm-icon-pack-fa.css" />
+	
+	<!--Script para identificar quem instala o app via Facebook-->
+	<script>
+		window.fbAsyncInit = function() {
+		FB.init({
+		appId : '553449298320657',
+		autoLogAppEvents : true,
+		xfbml : true,
+		version : 'v2.11'
+		});
+		};
+
+		(function(d, s, id){
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.id = id;
+		js.src = "https://connect.facebook.net/en_US/sdk.js";
+		fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
+
+	<!--Scripts do app-->
+	<script>
+		var tam;
+		var farmacias = [];
+		var distancias = [];
+		var estouAqui;
+		var p = 0;
+		var l = 0;
+		var aux = 0;
+		var lim = 0;
+		var tm2;
+		var tm3;
+		var tm5;
+		var liberado = false;
+		var liberTel = false;
+		var gps = false;
+		
+		//Evento disparado ao iniciar o app no celular. Faz o registro no Google Analytics
+		document.addEventListener("deviceready", onDeviceReady, false)
+
+        function onDeviceReady() {
+                FastClick.attach(document.body);
+                ga_storage._setAccount('UA-102229152-1'); //Replace with your own
+				ga_storage._trackPageview('/indexA.html');
+				
+				checkConnection();
+				try{
+					var push = PushNotification.init({
+					
+					android: {
+						senderID: "521237507632"
+					},
+					browser: {
+						pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+					},
+					ios: {
+						alert: "true",
+						badge: "true",
+						sound: "true"
+					},
+					windows: {}
+					});
+
+					push.on('registration', function(data) {
+						
+												
+						
+						var regID = data.registrationId;
+						
+						
+					});
+
+					push.on('notification', function(data) {
+						//alert('oi2');
+						//alert(data.message);
+						navigator.notification.alert(
+							data.message,  // message
+							alertDismissed,         // callback
+							'Notificação',            // title
+							'OK'                  // buttonName
+						); 	
+						// data.title,
+						// data.count,
+						// data.sound,
+						// data.image,
+						// data.additionalData
+					});
+
+					push.on('error', function(e) {
+						//alert('iiii');
+						alert (e.message)
+					});
+				}catch(ex){
+					alert(ex.message)
+				}
+				
+				function alertDismissed() {
+							// do somethings
+				}
+        }
+		
+		
+		$(document).ready(function(){
+			$('#busca').on('change', function (event) {
+				if ($('#busca').val() !=="")
+				localStorage.setItem("busca",$('#busca').val())
+				location.href = "produtos.html";
+			});
+			tam = $('.ui-content').css('height')
+			tam = tam.replace('px','')
+			tam = parseInt(tam) /2 + 'px';
+			$('.ui-content').css('height',tam)
+						
+		});
+		
+		//Função para consultar as farmácias próximas na api do google e popular o objeto farmacias
+		function carregarFarmacias(local){
+						
+						try{
+								 var request = {
+									location: local,
+									radius: 1500,
+									types: ['pharmacy']
+								  };
+
+								  //service = new google.maps.places.PlacesService(map);
+								  
+								  var service = new google.maps.places.PlacesService(document.createElement('div'));
+											
+								  service.nearbySearch(request, callback);
+								  function callback(results, status) {
+									
+									  if (status == google.maps.places.PlacesServiceStatus.OK) {
+										farmacias = results;	
+
+										liberado = true;
+								
+											tm2 = setInterval(function(){ 
+												var i = p;
+												
+												if (p == farmacias.length) clearInterval(tm2)
+
+												//alert(farmacias[i])
+												var endereco = farmacias[i].vicinity;
+												
+													if (liberado){
+														liberado = false;
+														CalculaDistancia(estouAqui, endereco)
+																					
+													}
+													
+											}, 100);
+												
+											tm3 = setInterval(function(){ 
+						
+												lim = lim +1;						
+																	
+											}, 500);
+									
+										}else{
+											var html = '<li class="itRemedios" style="padding-left: 8px;"><p class="wrap1">Nenhuma farmácia nas proximidades.</p></li>';
+											$('#listview').append(html);
+											$("#listview").listview("refresh");
+											clearInterval(tm2)
+											clearInterval(tm)
+											clearInterval(tm3)
+											$('.aguarde').remove();
+										}
+								  }
+								
+						}catch(ex){
+							//alert(ex.message)
+							if (ex.message == 'JSON.parse: unexpected end of data at line 3 column 1 of the JSON data'){
+								
+								var html = '<li class="itRemedios" style="padding-left: 8px;"><p class="wrap1">Nenhuma farmácia nas proximidades.</p></li>';
+								$('#listview').append(html);
+								$("#listview").listview("refresh");
+								clearInterval(tm2)
+								clearInterval(tm)
+								clearInterval(tm3)
+								$('.aguarde').remove();
+							}
+							
+						}
+				 
+		}
+		
+		//Timer para preencher list view com as farmácias próximas a partir do objeto farmacias
+		var tm = setInterval(function(){ 
+			
+			//if (p == farmacias.length-2 || lim >= 5) {
+
+			if (p == farmacias.length && farmacias.length >0 || lim >= 5) {
+
+
+				
+				//try{
+					
+					clearInterval(tm2)
+					clearInterval(tm)
+					clearInterval(tm3)
+														farmacias.sort(function(a,b) {if (b.distancia != undefined && a.distancia != undefined)return (parseFloat(a.distancia.replace(',','.')) > parseFloat(b.distancia.replace(',','.'))) ? 1 : ((parseFloat(b.distancia.replace(',','.')) > parseFloat(a.distancia.replace(',','.'))) ? -1 : 0);} );
+														liberTel = true;
+														farmacias.sort(function(a,b) {if (b.distancia != undefined && a.distancia != undefined)return (parseFloat(a.distancia.replace(',','.')) > parseFloat(b.distancia.replace(',','.'))) ? 1 : ((parseFloat(b.distancia.replace(',','.')) > parseFloat(a.distancia.replace(',','.'))) ? -1 : 0);} );
+														farmacias.sort(function(a,b) {if (b.distancia != undefined && a.distancia != undefined)return (parseFloat(a.distancia.replace(',','.')) > parseFloat(b.distancia.replace(',','.'))) ? 1 : ((parseFloat(b.distancia.replace(',','.')) > parseFloat(a.distancia.replace(',','.'))) ? -1 : 0);} );
+														for (var x=0;x<p;x++){
+															
+															if (farmacias[x].telefone == undefined){
+																if (farmacias[x].distancia !== undefined ){
+																	if (farmacias[x].distancia.indexOf("km") == -1) farmacias[x].distancia =  farmacias[x].distancia.replace("0,0","");
+																	var tel=""
+																	var endereco = farmacias[x].vicinity 
+																	var html = '<li class="itRemedios" style="padding-left: 8px;"><p class="wrap1">' + farmacias[x].name + '</p><p class="wrap2">' + endereco + '</p><div id = div_' + farmacias[x].place_id + '><a id =' + farmacias[x].place_id + '  class="wrap4 ui-btn" href="tel:' + farmacias[x].telefone +'">Carregando...</a></div><p class="wrap3">'+ farmacias[x].distancia +'</p></li>';
+																
+																	
+																	$('#listview').append(html);
+																	$("#listview").listview("refresh");
+																	$('a').removeClass('ui-btn-icon-right ui-icon-carat-r')
+																	$('.ui-listview>li').css("border-bottom","solid")
+																	$('.ui-listview>li').css("border-width","1px")
+																	$('.ui-listview>li').css("border-color","#D0D0D0")
+																
+																}
+															} else{
+																if (farmacias[x].distancia !== undefined ){
+																	if (farmacias[x].distancia.indexOf("km") == -1) farmacias[x].distancia =  farmacias[x].distancia.replace("0,0","");
+															
+																	var tel=""
+																	var endereco = farmacias[x].vicinity 
+																	var html = '<li class="itRemedios" style="padding-left: 8px;"><p class="wrap1">' + farmacias[x].name + '</p><p class="wrap2">' + endereco + '</p><a id =' + farmacias[x].place_id + ' class="wrap4 ui-btn" href="tel:' + farmacias[x].telefone +'">' +  farmacias[x].telefone +'</a><p class="wrap3">'+ farmacias[x].distancia +'</p></li>';
+																	
+																	
+																	$('#listview').append(html);
+																	$("#listview").listview("refresh");
+																	$('a').removeClass('ui-btn-icon-right ui-icon-carat-r')
+																	$('.ui-listview>li').css("border-bottom","solid")
+																	$('.ui-listview>li').css("border-width","1px")
+																	$('.ui-listview>li').css("border-color","#D0D0D0")
+																
+																}
+															}
+														}
+														
+														$('.aguarde').remove();
+				
+			}
+			
+							
+		}, 600);
+		
+		//Timer para fazer nova consulta a api do google e retornar telefones das farmácias
+		var tm5 = setInterval(function(){ 
+				   if (farmacias[l] != undefined && liberTel){
+										liberTel = false;		
+										var service = new google.maps.places.PlacesService(document.createElement('div'));
+										service.getDetails({
+											  placeId: farmacias[l].place_id
+												}, function(place, status) {
+												  if (status === google.maps.places.PlacesServiceStatus.OK) {
+													//alert(farmacias[l].place_id)				  
+													farmacias[l].telefone = place.formatted_phone_number
+													if (farmacias[l].telefone == undefined){
+														$('#' + farmacias[l].place_id).remove()
+													} else{
+														$('#' + farmacias[l].place_id).attr("href","tel:" + farmacias[l].telefone)
+														$('#' + farmacias[l].place_id).html('Tel: ' + farmacias[l].telefone);
+														$('#' + farmacias[l].place_id).css('visibility', 'visible');
+													}
+													
+													l = l+1;	
+													liberTel = true;		
+													if (l == farmacias.length) {
+														localStorage.setItem("farmacias",JSON.stringify(farmacias));
+														clearInterval(tm5)
+													}
+												}
+										});
+				   }									
+																
+			}, 300);
+		
+		//Para contornar problema de GPS no iOS
+		
+		navigator.geolocation.watchPosition(function(pos) {
+			 //alert("ouvindo");
+			//alert(gps);
+			  if (gps == false){
+			//	  alert("i'm tracking you!");
+				  GetAddress(pos.coords.latitude, pos.coords.longitude);			
+				  				  
+			  }
+			  
+			  gps = true;
+		},
+		function (error) { 
+			  if (error.code == error.PERMISSION_DENIED)
+			  alert("you denied me :-(");
+		});
+		
+		
+		//if ( navigator.geolocation ) {
+		//		function success(pos) {
+					
+		//			 GetAddress(pos.coords.latitude, pos.coords.longitude);			
+		//		}
+		//		function fail(error) {
+		//			//drawMap(defaultLatLng);  // Failed to find location, show default map
+		//		}
+		//		alert("capturando position!");
+		//		// Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
+		//		navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy:true, timeout: 6000});
+			
+		//}
+		
+		//Função para obter o endereço do usuário
+		function GetAddress(lat,lng) {
+
+				var latlng = new google.maps.LatLng(lat, lng);
+				var geocoder = geocoder = new google.maps.Geocoder();
+				geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						if (results[1]) {
+
+							//endereco = results[0].formatted_address + ' ' + results[1].formatted_address;
+
+							obj = results[0];
+							
+							estouAqui= obj.address_components[1].short_name + ',' + obj.address_components[0].short_name + ' - ' + obj.address_components[2].short_name + ' - ' + obj.address_components[3].short_name;
+							var cep = obj.address_components[7].short_name;
+							//var latlng2 = new google.maps.LatLng(-23.001333, -43.366054);
+							
+							carregarFarmacias(latlng);
+
+						}
+
+						//carrega o estado do usuário para determinar o cálculo do ICMS
+						console.log(results);
+						console.log(results[0]);
+						console.log(results[0].address_components[5]);
+						console.log(results[0].address_components[5].short_name);
+						
+						var state = (results[0].address_components[5].short_name);
+
+						//define cada cálculo de ICMS pelo estado (tabela 1)
+						if (state == "RJ") {
+
+							var icms = 20;
+							var precoM = 30;										
+							var precoT = precoM + (precoM/100)*icms;
+
+							console.log('Você está no estado do ' + state + ' e o ICMS é de ' + icms + '%.');
+							console.log('Valor exemplo de tabela do produto: ' + precoM + '.');
+							console.log('Valor exemplo corrigido por ICMS: ' + precoT + '.');
+
+							var queryString = "?para1=" + state;
+							window.location.href = "produtos.html" + queryString;
+
+						} else {
+
+							//define cada cálculo de ICMS pelo estado (tabela 2)
+							if (state == "AP","AM","BA","CE","MA","MG","PI","PR","PB","PE","RN","RS","SP","SE","TO") {
+
+								var icms = 18;
+								var precoM = 30;										
+								var precoT = precoM + (precoM/100)*icms;
+
+								console.log('Você está no estado do ' + state + ' e o ICMS é de ' + icms + '%.');
+								console.log('Valor exemplo de tabela do produto: ' + precoM + '.');
+								console.log('Valor exemplo corrigido por ICMS: ' + precoT + '.');
+
+								var queryString = "?para1=" + state;
+								window.location.href = "produtos.html" + queryString;
+
+							} else {
+
+								//define cada cálculo de ICMS pelo estado (tabela 3)
+								if (state == "AC","AL","DF","ES","GO","MT","MS","PA","RR","SC") {
+
+									var icms = 17;
+									var precoM = 30;										
+									var precoT = precoM + (precoM/100)*icms;
+
+									console.log('Você está no estado do ' + state + ' e o ICMS é de ' + icms + '%.');
+									console.log('Valor exemplo de tabela do produto: ' + precoM + '.');
+									console.log('Valor exemplo corrigido por ICMS: ' + precoT + '.');
+
+									var queryString = "?para1=" + state;
+									window.location.href = "produtos.html" + queryString;
+
+								} else {
+
+									//define cada cálculo de ICMS pelo estado (tabela 4) - medicamentos genéricos MG e SP
+									if (state == "MG","SP") {
+
+										var icms = 12;
+										var precoM = 30;										
+										var precoT = precoM + (precoM/100)*icms;
+
+										console.log('Você está no estado do ' + state + ' e o ICMS é de ' + icms + '%.');
+										console.log('Valor exemplo de tabela do produto: ' + precoM + '.');
+										console.log('Valor exemplo corrigido por ICMS: ' + precoT + '.');
+
+										var queryString = "?para1=" + state;
+										window.location.href = "produtos.html" + queryString;
+
+									}
+								}
+							}
+						}
+					}
+				});
+		}	
+		
+		//Calcula distância em KM entre usuário e farmácia	
+		function CalculaDistancia(origem,destino) {
+				
+                //Instanciar o DistanceMatrixService
+				//destino = "RUA MARQUES DE ABRANTES, 34 - FLAMENGO - RIO DE JANEIRO"
+                var service = new google.maps.DistanceMatrixService();
+                //executar o DistanceMatrixService
+				
+                service.getDistanceMatrix(
+                  {
+                      //Origem
+                      origins: [origem],
+                      //Destino
+                      destinations: [destino],
+                      //Modo (DRIVING | WALKING | BICYCLING)
+                      travelMode: google.maps.TravelMode.DRIVING,
+                      //Sistema de medida (METRIC | IMPERIAL)
+                      unitSystem: google.maps.UnitSystem.METRIC
+                      //Vai chamar o callback
+                  }, callback);
+        }
+			
+        //Tratar o retorno do DistanceMatrixService
+        function callback(response, status) {
+				//alert('verificando')
+                //Verificar o Status
+                if (status != google.maps.DistanceMatrixStatus.OK){
+                    //Se o status não for "OK"
+                    //$('#litResultado').html(status);
+					//distancias.push("N")
+                }else {
+                    //Se o status for OK
+                    //Endereço de origem = response.originAddresses
+                    //Endereço de destino = response.destinationAddresses
+					//alert(nome)
+					try{ 
+						
+						var Distancia = response.rows[0].elements[0].distance.text
+						
+						if (Distancia.indexOf("km") == -1) Distancia = "0,0" + Distancia
+						farmacias[p].distancia = Distancia
+						
+						
+					}catch(ex){}
+                   
+                    //Duração = response.rows[0].elements[0].duration.text
+					
+					//return Distancia;
+                    
+                }
+				liberado = true;
+				p = p+1;
+        }
+		
+	
+		//Função para testar se conexão com internet existe
+		function checkConnection() {
+			try{
+					
+				
+				var networkState = navigator.connection.type;
+		 
+				var states = {};
+				states[Connection.UNKNOWN]  = 'Unknown connection';
+				states[Connection.ETHERNET] = 'Ethernet connection';
+				states[Connection.WIFI]     = 'WiFi connection';
+				states[Connection.CELL_2G]  = 'Cell 2G connection';
+				states[Connection.CELL_3G]  = 'Cell 3G connection';
+				states[Connection.CELL_4G]  = 'Cell 4G connection';
+				states[Connection.CELL]     = 'Cell generic connection';
+				states[Connection.NONE]     = 'No network connection';
+				
+				if (states[networkState]=='No network connection') {
+					var html = '<li class="itRemedios" style="padding-left: 8px;"><p class="wrap1">Sem conexão disponível.</p><a class="wrap5 ui-btn" href="#" onclick="semCon()">Tentar novamente</a></li>';
+					$('#listview').append(html);
+					$("#listview").listview("refresh");
+					$('a').removeClass('ui-btn-icon-right ui-icon-carat-r')
+					$('.ui-listview>li').css("border-bottom","solid")
+					$('.ui-listview>li').css("border-width","1px")
+					$('.ui-listview>li').css("border-color","#D0D0D0")
+					$('.aguarde').remove();
+				}
+				
+			}catch(ex){
+				alert(ex.message)		
+			}
+			 
+		}
+		
+		function semCon(){ window.location.href= 'indexA.html';}
+					
+	</script>
+
+</head>
+<body>
+	
+	<!-- Tela principal com a listagem de farmácias próximas -->
+	<div data-role="page" id="pageone">
+	  <div data-role="header" class="header header-wrap" style="margin-top: 0.1px;">
+		<img src="img/cadastro.png" id="btnCadastro" style="float:left; margin-top:14px; margin-left: 8px; margin-right: 13px; height: 8%; width: 8%;" onclick="location.href='#cadastro'">
+		<div style="margin-left: 3.25em; font-size: 10px">
+			<h1>Farmácias Próximas</h1>
+		</div>
+		<img src="img/mapa2.png" style="float:right; margin-top: -45px; height: 14%; width: 14%" onclick="location.href='mapa.html'"/>
+		
+	  </div>
+		
+
+	  <div data-role="main" class="ui-content" style="margin-top:10px;"> 
+		<div class="content-primary">	
+			
+			<!-- <p>Fármacias próximas</p> -->
+			<!-- <img src="img/gps.png" style="margin-left:90%;margin-top:-84px" onclick="location.href='produtos.html'"/> -->
+			<ul data-role="listview" id ="listview">
+				<!-- <img class="aguarde" src="img/aguarde.gif"/>				 -->
+				<img class="aguarde" src="img/aguarde.gif"/>
+			</ul> 
+		 </div>
+		 <a id="telefone" href="#"></a>
+	  </div>
+
+	</div> 
+	
+	
+	<!-- Tela de cadastro de farmácias -->
+	<div data-role="page" id="cadastro">
+	  <div data-role="header" class="header header-wrap" style="margin-top: 0.1px;">
+		<img src="img/back.png" style="float:left;margin:4px;margin-top:15px" onclick="location.href='#pageone'">
+		<h1>Cadastro</h1>
+	  </div>
+
+	  <div data-role="main" class="ui-content" style="margin-top:35px;">
+		<div data-role="fieldcontain">
+			<label for="nome">Nome:</label>
+			<input type="text" id="nome" value="" placeholder="Digite o nome da farmácia"/>
+		</div>
+		<div data-role="fieldcontain">
+			<label for="nome">Endereço:</label>
+			<input type="text" id="endereco" value="" placeholder="Digite o endereço da farmácia"/>
+		</div>
+		<div data-role="fieldcontain">
+			<label for="nome">Cidade:</label>
+			<input type="text" id="cidade" value="" placeholder="Digite a cidade da farmácia"/>
+		</div>
+		<div data-role="fieldcontain">
+			<label for="nome">Estado:</label>
+			<select id="estado">
+				<option>Escolha</option>
+				<option>	AC	</option>
+				<option>	AL	</option>
+				<option>	AP	</option>
+				<option>	AM	</option>
+				<option>	BA	</option>
+				<option>	CE	</option>
+				<option>	DF	</option>
+				<option>	ES	</option>
+				<option>	GO	</option>
+				<option>	MA	</option>
+				<option>	MT	</option>
+				<option>	MS	</option>
+				<option>	MG	</option>
+				<option>	PA	</option>
+				<option>	PB	</option>
+				<option>	PR	</option>
+				<option>	PE	</option>
+				<option>	PI	</option>
+				<option>	RJ	</option>
+				<option>	RN	</option>
+				<option>	RS	</option>
+				<option>	RO	</option>
+				<option>	RR	</option>
+				<option>	SC	</option>
+				<option>	SP	</option>
+				<option>	SE	</option>
+				<option>	TO	</option>
+			</select>
+		</div>
+		<div data-role="fieldcontain">
+			<label for="nome">Telefone:</label>
+			<input type="text" id="telefone" value="" placeholder="Digite o telefone da farmácia"/>
+		</div>
+		<div data-role="fieldcontain">
+			
+			<input type="button" id="btnEnviar" value="Enviar" onclick="cadastrar()"/>
+			<script>
+				function cadastrar(){
+						
+							$.ajax({
+								 type: "POST",
+								 url : "http://remedin.fourtuna.com.br/wp-content/cadastro.php",
+								 data: $("#nome").val() + $("#endereco").val() + $("#telefone").val(),
+								 crossDomain: true,
+								 cache: false,
+								 success: function(data){
+									 
+									 navigator.notification.alert(
+										'Obrigado pela indicação da Farmácia. Iremos analisar os dados e assim que forem aprovados ela estará disponível para consulta como as demais.',  // message
+										alertDismissed,         // callback
+										'Cadastro',            // title
+										'OK'                  // buttonName
+									); 	
+									
+								 }
+							 });
+					
+							
+				}	
+				
+				function alertDismissed() {	// do somethings
+				};
+			</script>
+			<style>
+				#estado-button{
+					background: white;
+					color: #333;
+					border-bottom: 1px solid white;
+					border-radius: 25px;
+				}
+			</style>
+		</div>
+	  </div>
+	</div> 
+
+</body>
+</html>

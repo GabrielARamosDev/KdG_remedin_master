@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	 <meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+
+	<title>Remedin</title>
+
+	<!--Include JQM and JQ,-->
+	<script src="cordova.js"></script>	
+	<script src="js/fastclick.js"></script>
+	<!-- <link rel="stylesheet" href="css/themes/jqmfb.min.css" /> -->
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript" src="js/GALocalStorage.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/icons.css" />
+	<link rel="stylesheet" type="text/css" href="css/styles.css" />
+	
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ&libraries=places"></script>
+
+	<!-- AIzaSyAVCoBxjjtyxFcvo7Y6tTFjVLNmpFB17pg --> 
+	
+	<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ&callback=initMap" type="text/javascript"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwFoj_CRsaHXCDB4YRSyAvccKVJ7afZiQ&libraries=places&callback=initMap" type="text/javascript"></script> -->
+
+	<script>
+		var map,meuEndereco;
+		//var farmacias = [];
+		var farmacias = JSON.parse(localStorage.getItem("farmacias"));
+		document.addEventListener("deviceready", onDeviceReady, false)
+		function onDeviceReady() {
+                FastClick.attach(document.body);
+				ga_storage._setAccount('UA-102229152-1'); //Replace with your own
+				ga_storage._trackPageview('/mapa.html');
+		}
+		$( document ).on( "pageinit", "#map-page", function() {
+		
+			
+			var defaultLatLng = new google.maps.LatLng(34.0983425, -118.3267434);  // Default to Hollywood, CA when no geolocation support
+			if ( navigator.geolocation ) {
+				function success(pos) {
+					// Location found, show map with these coordinates
+					
+					//meuEndereco = 
+					GetAddress(pos.coords.latitude, pos.coords.longitude);
+					drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+				}
+				function fail(error) {
+					drawMap(defaultLatLng);  // Failed to find location, show default map
+				}
+				// Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
+				navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy:true, timeout: 6000});
+			} else {
+				drawMap(defaultLatLng);  // No geolocation support, show default map
+			}
+			function drawMap(latlng) {
+				var myOptions = {
+					zoom: 14,
+					center: latlng,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				};
+				var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+				var j;
+				// Add an overlay to the map of current lat/lng
+				var marker2 = new google.maps.Marker({
+					position: latlng,
+					map: map,
+					icon: "img/here.png",
+					title: "Estou aqui!"
+					
+				});
+				var infowindow2 = new google.maps.InfoWindow();
+				var j;
+				 marker2.addListener('click', function() {
+					navigator.notification.alert(
+							meuEndereco,  // message
+							alertDismiss,         // callback
+							'Estou aqui!',            // title
+							'OK'                  // buttonName
+						); 
+				});
+				function alertDismiss(){}
+			   
+				 var tm = setInterval(function(){ 
+	
+						var infowindow = new google.maps.InfoWindow();
+
+						var marker, i;
+						
+						for (i = 0; i < farmacias.length; i++) {  
+							  
+							  var endereco = farmacias[i].vicinity;
+							  var telefone=farmacias[i].telefone;
+							  var detalhe = '<h1>' + farmacias[i].name +'</h1><p>' + endereco + '</p><hr>';
+							  if (telefone != undefined)
+							  detalhe = detalhe + '<img style="float:left;margin-top: -2px;" src="img/tel.png"/><a style="text-decoration: none;color: black;" href="tel:' + telefone +'"/>' + telefone +'</a>'
+							  marker = new google.maps.Marker({
+								position: new google.maps.LatLng(farmacias[i].geometry.location.lat, farmacias[i].geometry.location.lng),
+								map: map,
+								icon: "img/farmacia.png",
+								title: detalhe
+							  });
+
+							  google.maps.event.addListener(marker, 'click', (function(marker, i) {
+								return function() {
+								  infowindow.setContent(this.title);
+								  infowindow.open(map, marker);
+								}
+							  })(marker, i));
+						}
+						clearInterval(tm);
+				  }, 3000);
+				
+			}
+			
+			function GetAddress(lat,lng) {
+
+				var latlng = new google.maps.LatLng(lat, lng);
+				var geocoder = geocoder = new google.maps.Geocoder();
+				geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						if (results[1]) {
+
+							//endereco = results[0].formatted_address + ' ' + results[1].formatted_address;
+
+							obj = results[0];
+							
+							meuEndereco = obj.address_components[1].short_name + ',' + obj.address_components[0].short_name + ' - ' + obj.address_components[2].short_name + ' - ' + obj.address_components[3].short_name;
+
+							console.log(meuEndereco);
+							console.log(results[0]);
+							console.log(results[0].address_components[5].long_name);
+
+							pais = results[0].address_components[5].long_name;
+							res = pais.replace("z", "s");
+
+							console.log(res);
+
+						}
+					}
+				});
+			}
+		});
+		
+		 
+	</script>
+
+</head>
+<body>
+
+	<div data-role="page" id="map-page" data-url="map-page">
+		<div data-role="header" class="header" >
+			<img style="margin-top: 18px;" src="img/back.png" class="backM" onclick="location.href='indexA.html'"/>
+			<h1>Mapa</h1>
+		</div>
+		
+		<div role="main" class="ui-content" id="map-canvas" style="height:92%">
+			<!-- map loads here... -->
+		</div>
+	</div>
+	
+</body>
+</html>

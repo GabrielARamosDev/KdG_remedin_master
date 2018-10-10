@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+
+	<title>Produtos</title>
+
+	<!--Include JQM and JQ-->
+	<script src="cordova.js"></script>	
+	<script src="js/fastclick.js"></script>
+	<!-- <link rel="stylesheet" href="css/themes/jqmfb.min.css" /> -->
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/icons.css" />
+	
+	<script>
+	
+		function mudarQtd(param)
+		{
+			if (param == "mais"){
+				var qtd = parseInt($('#qtd').html())
+				var total = $('#total').html().replace("R$","")
+				total = total.replace(",",".")
+				$('#qtd').html(qtd + 1)
+				//$('#total').html(parseFloat(total) * qtd );
+			}else{
+				if ($('#qtd').html() != 1) 
+				$('#qtd').html( parseInt($('#qtd').html()) - 1)
+				//$('#total').html(parseInt($('#total').html()) * qtd );
+			}
+		}
+	</script>
+	
+
+
+	</head>
+<body>
+	
+
+
+
+	<div data-role="page" id="pageone">
+	  <div data-role="header" class="header" >
+		<h1>Remédios</h1>
+		
+	  </div>
+
+	  <div data-role="main" class="ui-content">
+		<div class="content-primary">	
+		
+	  
+		 <ul data-role="listview">
+			  <li role="heading" data-role="list-divider"></li> 
+			  <li>
+				<h2>Aspirina</h2>
+				
+				<div data-role="controlgroup" data-type="horizontal">
+				  
+				  
+				  <a href="#" onclick = "mudarQtd('menos')" data-role="button" data-icon="minus" style="color:transparent">1</a>
+				  <a id ="qtd" href="#"  data-role="button" data-icon="">1</a>
+				  <a href="#" onclick = "mudarQtd('mais')" data-role="button" data-icon="plus" data-iconpos="right" style="color:transparent">1</a>
+				  
+				  
+				</div>
+				<div class="preco">
+					<h2 >R$21,50</h2>
+				</div>
+			  </li>
+			  <li role="heading" data-role="list-divider"><div class="total"><h2>Total:</h2><h3 id="total">R$21,50</h3></div></li>						  
+		</ul>
+	 
+		</div> 
+		
+	</div>
+	<!-- <div class="loadersmall"></div>  -->
+	<div data-role="footer" id="footer">
+		<h1 onclick="adicionarCarrinho()">Adicionar ao Carrinho</h1>
+		<script>
+			function adicionarCarrinho(){
+				navigator.notification.alert(
+				'Produto adicionado ao carrinho com sucesso!',  // message
+				alertDismissed,         // callback
+				'Carrinho',            // title
+				'OK'                  // buttonName
+				); 
+			}
+			
+			function alertDismissed(){location.href='produtos.html'}
+		</script>
+	 </div> 
+	</div>
+
+	
+	<script>
+		
+	</script>	
+	
+</body>
+
+	
+
+</html>

@@ -1,0 +1,18 @@
+for (var i=0; i< length; i ++){
+if (i==0) {
+	total = f[i].total;
+}else if(f[i-1].nome == f[i].nome){
+	total += f[i].total;
+	
+}else if(f[i-1].nome !== f[i].nome){
+	console.log(total);
+	x = {"nome": f[i].nome, "total": f[i].total}
+	total = f[i].total;
+}
+}
+
+console.log(total);
+
+b = b.replace(",",".")
+"87.10"
+parseFloat(a) + parseFloat(b)

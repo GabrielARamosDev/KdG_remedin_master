@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+
+	 <script src="cordova.js"></script>	
+	 <script src="js/fastclick.js"></script>
+	 <script src="js/jquery-1.11.3.min.js"></script>
+	  <!-- Include the jQuery library -->
+	  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	  <!-- Include the jQuery Mobile library -->
+	  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+	  <script src="js/ctrlProdutos.js"></script>
+
+	  <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+	  <link rel="stylesheet" type="text/css" href="css/icons.css" />
+
+	<style>
+		body{
+			background: white
+		}
+	</style>
+
+	<script>
+		$(document).ready(function(){
+			$('#nome').val(localStorage.getItem('usuario'));
+			$('#email').val(localStorage.getItem('email'));
+			$('#idface').val(localStorage.getItem('id'));
+		 });
+	</script>
+	
+</head>
+<body ng-app="produtos" ng-controller="ctrlProdutos">
+
+		<div data-role="content">
+			<form style="margin-left: 12px;margin-right: 12px">
+				<div class="ui-field-contain">
+					<label for="nome">Nome:</label>
+					<input type="text" id = "nome" name="nome" required>
+					<input type="hidden" id = "idface" name="idface" required>
+				</div>
+							
+				<div class="ui-field-contain">
+					<label for="email">E-mail:</label>
+					<input type="text" id = "email" name="email" required>
+				</div>		
+				<input value="Enviar" type="button" ng-click="cadastrarUsuario()">
+				<a style="margin-left: 3.25em; background: rgb(196, 0, 0); border-color: rgb(255, 35, 35)" value="Voltar" class="wrap4 ui-btn blista" href="produtos.html#perfil" onclick="location.href='produtos.html#perfil'">Voltar</a>
+
+			</form>
+        </div>
+
+</body>
+</html>
+

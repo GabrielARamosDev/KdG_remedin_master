@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	 <meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+
+
+	<title>Produtos</title>
+
+	<!--Include JQM and JQ-->
+	<script src="cordova.js"></script>	
+	<script src="js/fastclick.js"></script>
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+	<script src="js/ctrlProdutos.js"></script>
+	
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" type="text/css" href="css/icons.css" />
+	
+
+</head>
+<body ng-app="produtos" ng-controller="ctrlProdutos" ng-init="carregar(buscaini)">
+	
+
+	<div data-role="page" id="pageone">
+	
+	  <div data-role="header" class="header header-wrap " >
+		<img src="img/back.png" class="back" onclick="location.href='index.html'"/>
+		<h1>Busca</h1>
+		<input type="search" id="busca" class="search" placeholder="Busque por medicamentos"  name="search" id="search-basic" ng-model="campobusca" ng-keydown="keydown($event)" value="" />
+	  </div>
+	  <!-- <img class = "aguarde" src="img/aguarde.gif"/> -->
+	  
+	  <div id ="dvBusca" data-role="main" class="ui-content" style="margin-top:100px">
+		<div class="content-primary">	
+			
+			<ul data-role="listview" id="listview" >
+				<li role="heading" data-role="list-divider">
+					<div class="titulo">
+						<h5 id="encontrado" ng-bind="textobusca"> </h5>
+					</div>
+				</li>
+					
+				<li ng-repeat="rem in remedios" class="itRemedios" style="padding-left: 8px;">
+					<p class="wrap1" ng-attr-id = "{{'p' + $index}}">{{rem.nome}}</p>
+					<p class="wrap2" ng-attr-id = "{{'d' + $index}}">{{rem.bula}}</p>
+					<p class="wrap2">{{rem.dosagem}}</p>
+					<a class="wrap4 ui-btn" ng-attr-id = "{{$index}}" href="#" ng-click="adicionarLista($event)">Adicionar a lista</a>
+				</li>
+			</ul> 
+			
+		
+		 </div>
+		
+	  </div>
+
+	  <div data-role="footer" id="footer" class ="ftLista" style="visibility:hidden">
+			<h1 onclick="location.href='produtos.html#lista';localStorage.setItem('listaHome','false')">Visualizar Lista</h1>
+	  </div> 		
+
+	  <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="location.href='produtos.html#lista'">
+			<img src="img/cart.png">
+	   </div> 
+
+		
+	</div> 
+	
+	
+	<div data-role="page" id="lista">
+	  <div data-role="header" class="header" >
+		<img src="img/back.png" class="back" onclick="voltarLista()"/>
+	
+		<h1>Lista</h1>
+		
+	  </div>
+
+	  <div data-role="main" class="ui-content">
+		<div class="content-primary">	
+		
+	  
+		 <ul data-role="listview" id="listaView">
+			  <li role="heading" data-role="list-divider" ></li> 
+			  <li ng-repeat="list in lista" class="ui-li-static ui-body-inherit ui-last-child">
+				<h2 class="hLista">{{list.nome}}</h2>
+				<p>{{list.dosagem}}</p>
+
+				<div data-role="controlgroup" class="ui-controlgroup ui-controlgroup-horizontal ui-corner-all"  data-type="horizontal" style="margin-left: 58%;">
+				  
+				  <div class="ui-controlgroup-controls ">
+					  <a href="#" class="ui-link ui-btn ui-shadow ui-corner-all ui-first-child"  data-role="button"  data-iconpos="right" ng-click="subt()">-</a>
+					  <a id ="qtd1" class="ui-link ui-btn ui-shadow ui-corner-all" href="#"  data-role="button" data-icon="">{{list.qtd}}</a>
+					  <a href="#" class="ui-link ui-btn ui-shadow ui-corner-all ui-last-child"  data-role="button"  data-iconpos="left" ng-click="somar()">+</a>
+				  </div>
+				</div>
+				
+			  </li>
+
+					  
+		</ul>
+	 
+		</div> 
+	
+	  </div>
+	<!-- <div class="loadersmall"></div>  -->
+	<div data-role="footer" id="footer">
+		<h1 onclick="location.href='produtos.html#orcamento'">Gerar Orçamento</h1>
+		<script>
+			
+		</script>
+	 </div> 
+	</div>
+	
+	<div data-role="page" id="orcamento" onload="$('a').removeClass('ui-shadow')">
+	  <div data-role="header" class="header header-wrap" >
+		<img src="img/back.png" class="back" onclick="location.href='produtos.html'"/>
+		<h1>Fármacias</h1>
+		
+	  </div>
+
+	  <div id ="dvOrcamento" data-role="main" class="ui-content" style="margin-top:20px">
+		<div class="content-primary">	
+		
+	  
+		 <ul data-role="listview" id ="listview">
+				
+				<li><a href="#">
+					<img src="img/ico-farmacia.png" />
+					<div class="preco">
+						<h3>Drogaria Pacheco</h3>
+						<p class="wrap">Rua Barata Ribeiro , 56 - Copacabana - RJ. Tel:(21)2556-8765</p>
+						<button type="button"  style="width:70%;background: #009900;color:white" onclick="fazerPedido()">Fazer pedido</button>
+						<h2>R$ 90,00</h2>
+						
+					</div>
+				</a></li>
+				<li><a href="#">
+					<img src="img/ico-farmacia.png" />
+					<div class="preco">
+						<h3>Drogaria Mundial</h3>
+						<p class="wrap">Av Nossa Senhora de Copacabana , 1016 - Copacabana - RJ Tel:(21)2504-8125</p>
+						<button type="button"  style="width:70%;background: #009900;color:white" onclick="fazerPedido()">Fazer pedido</button>
+						<h2>R$ 45,00</h2>
+					</div>
+				</a></li>
+				<li><a href="#">
+					<img src="img/ico-farmacia.png" />
+					<div class="preco">
+						<h3>Drogaria Mundial</h3>
+						<p class="wrap">Av Nossa Senhora de Copacabana , 1016 - Copacabana - RJ Tel:(21)2504-8125</p>
+						<button type="button"  style="width:70%;background: #009900;color:white" onclick="fazerPedido()">Fazer pedido</button>
+						<h2>R$ 34,50</h2>
+					</div>
+				</a></li>
+				<li><a href="#">
+					<img src="img/ico-farmacia.png" />
+					<div class="preco">
+						<h3>Drogaria Mundial</h3>
+						<p class="wrap">Av Nossa Senhora de Copacabana , 1016 - Copacabana - RJ Tel:(21)2504-8125</p>
+						<button type="button"  style="width:70%;background: #009900;color:white" onclick="fazerPedido()">Fazer pedido</button>
+						<h2>R$ 92,00</h2>
+					</div>
+				</a></li>
+				<li><a href="#">
+					<img src="img/ico-farmacia.png" />
+					<div class="preco">
+						<h3>Drogaria Mundial</h3>
+						<p class="wrap">Av Nossa Senhora de Copacabana , 1016 - Copacabana - RJ Tel:(21)2504-8125</p>
+						<button type="button"  style="width:70%;background: #009900;color:white" onclick="fazerPedido()">Fazer pedido</button>
+						<h2>R$ 68,00</h2>
+					</div>
+				</a></li>
+				
+			
+			</ul> 
+			<script>
+				function fazerPedido(){
+					
+						navigator.notification.alert(
+							'Pedido realizado com sucesso!',  // message
+							alertDismiss,         // callback
+							'Pedido',            // title
+							'OK'                  // buttonName
+						); 
+										
+						
+				}
+					
+				function alertDismiss(){}//location.href='produtos.html#pageone'}
+				//versao nova
+			</script>
+		</div> 
+		
+	</div>
+
+	
+	
+</body>
+
+	
+
+</html>
